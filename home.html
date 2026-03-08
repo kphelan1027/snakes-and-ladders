@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>🎮 Game Arcade</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+  font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:100dvh;overflow:hidden;
+  -webkit-user-select:none;user-select:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.container{
+  display:flex;flex-direction:column;align-items:center;gap:20px;
+  max-width:520px;width:100%;padding:24px;
+}
+h1{
+  font-size:2.8rem;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.3);
+  margin-bottom:-4px;
+}
+.subtitle{
+  color:rgba(255,255,255,.8);font-size:1rem;font-weight:600;
+  margin-bottom:12px;
+}
+.game-card{
+  width:290px;padding:0;border:none;border-radius:20px;
+  background:rgba(255,255,255,.12);backdrop-filter:blur(8px);
+  cursor:pointer;overflow:hidden;transition:all .2s;
+  box-shadow:0 4px 20px rgba(0,0,0,.2);border:2px solid rgba(255,255,255,.15);
+  text-decoration:none;color:#fff;display:block;
+}
+.game-card:hover{
+  transform:translateY(-4px) scale(1.02);
+  box-shadow:0 8px 32px rgba(0,0,0,.3);
+  border-color:rgba(255,255,255,.35);
+}
+.game-card:active{transform:scale(.97)}
+.card-body{padding:20px 22px 18px;display:flex;flex-direction:column;gap:6px}
+.card-emoji{font-size:2.8rem;margin-bottom:2px}
+.card-title{font-size:1.4rem;font-weight:800}
+.card-desc{font-size:.9rem;color:rgba(255,255,255,.7);font-weight:500;line-height:1.4}
+.card-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:.75rem;font-weight:700;
+  background:rgba(255,255,255,.15);border-radius:8px;
+  padding:4px 10px;width:fit-content;margin-top:4px;
+}
+.divider{
+  width:60px;height:2px;background:rgba(255,255,255,.2);border-radius:2px;
+}
+.footer{
+  font-size:.8rem;color:rgba(255,255,255,.4);font-weight:500;margin-top:8px;
+}
+/* bouncy entrance */
+.game-card:nth-child(1){animation:cardIn .5s cubic-bezier(.22,1.8,.5,1) both}
+.game-card:nth-child(2){animation:cardIn .5s cubic-bezier(.22,1.8,.5,1) .1s both}
+@keyframes cardIn{0%{opacity:0;transform:translateY(30px) scale(.9)}100%{opacity:1;transform:translateY(0) scale(1)}}
+h1{animation:cardIn .4s cubic-bezier(.22,1.8,.5,1) both}
+.subtitle{animation:cardIn .4s cubic-bezier(.22,1.8,.5,1) .05s both}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🎮</h1>
+  <h1>Game Arcade</h1>
+  <div class="subtitle">Pick a game</div>
+
+  <a class="game-card" href="index.html">
+    <div class="card-body">
+      <div class="card-emoji">🐍🪜</div>
+      <div class="card-title">Snakes & Ladders</div>
+      <div class="card-desc">Roll dice, dodge snakes, climb ladders. 2–4 players on one device.</div>
+      <div class="card-badge">👥 2-4 Players</div>
+    </div>
+  </a>
+
+  <div class="divider"></div>
+
+  <a class="game-card" href="snake.html">
+    <div class="card-body">
+      <div class="card-emoji">🐍💨</div>
+      <div class="card-title">Snake</div>
+      <div class="card-desc">The Nokia classic, reimagined. Swipe to steer, chase combos, beat your high score.</div>
+      <div class="card-badge">🎯 Solo · 4 Modes</div>
+    </div>
+  </a>
+
+  <div class="footer">Ad-free · No sign-up · Just play</div>
+</div>
+</body>
+</html>
