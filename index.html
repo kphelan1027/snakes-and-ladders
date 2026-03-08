@@ -62,7 +62,7 @@
   .board-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
 
   /* TOKENS */
-  .token { position: absolute; width: 8.5%; height: 8.5%; transition: left 0.35s cubic-bezier(0.34,1.56,0.64,1), top 0.35s cubic-bezier(0.34,1.56,0.64,1); z-index: 10; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4)); pointer-events: none; }
+  .token { position: absolute; width: 8.5%; height: 8.5%; transition: left 0.45s cubic-bezier(0.22,1.8,0.5,1), top 0.45s cubic-bezier(0.22,1.8,0.5,1); z-index: 10; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4)); pointer-events: none; }
   .token.sliding { transition: left 0.7s ease-in-out, top 0.7s ease-in-out; }
   .token.bounce { animation: tokenBounce 0.4s ease-out; }
   @keyframes tokenBounce { 0% { transform: scale(1); } 40% { transform: scale(1.4); } 100% { transform: scale(1); } }
@@ -240,8 +240,20 @@ function getAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || wind
 function playTone(freq, dur, type='sine', vol=0.12) {
   try { const ctx=getAudio(), o=ctx.createOscillator(), g=ctx.createGain(); o.type=type; o.frequency.value=freq; g.gain.value=vol; g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur); o.connect(g).connect(ctx.destination); o.start(); o.stop(ctx.currentTime+dur); } catch(e){}
 }
-function sfxDice() { playTone(350,0.06,'square',0.08); setTimeout(()=>playTone(450,0.06,'square',0.08),50); }
-function sfxStep() { playTone(660,0.05,'sine',0.07); }
+function sfxDice() {
+  // Rattling dice sound — short noise bursts
+  try {
+    const ctx=getAudio(), bufSize=ctx.sampleRate*0.06;
+    const buf=ctx.createBuffer(1,bufSize,ctx.sampleRate);
+    const data=buf.getChannelData(0);
+    for(let i=0;i<bufSize;i++) data[i]=(Math.random()*2-1)*0.3*(1-i/bufSize);
+    const src=ctx.createBufferSource(); src.buffer=buf;
+    const bp=ctx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=1800+Math.random()*600; bp.Q.value=1.5;
+    const g=ctx.createGain(); g.gain.value=0.18;
+    src.connect(bp).connect(g).connect(ctx.destination); src.start();
+  } catch(e){}
+}
+function sfxStep() { playTone(660,0.06,'sine',0.08); }
 function sfxSnake() { playTone(250,0.25,'sawtooth',0.08); setTimeout(()=>playTone(180,0.35,'sawtooth',0.06),150); setTimeout(()=>playTone(120,0.3,'sawtooth',0.04),350); }
 function sfxLadder() { [0,90,180,270].forEach((d,i)=>setTimeout(()=>playTone(440+i*110,0.12,'sine',0.09),d)); }
 function sfxWin() { [0,100,200,300,400,500].forEach((d,i)=>setTimeout(()=>playTone(350+i*70,0.22,'sine',0.1),d)); }
@@ -633,7 +645,7 @@ async function rollDice() {
   btn.classList.remove('six-glow');
 
   const result=Math.floor(Math.random()*6)+1;
-  for (let i=0; i<10; i++) { face.innerHTML=diceFaceHTML(Math.floor(Math.random()*6)+1); sfxDice(); await sleep(45); }
+  for (let i=0; i<12; i++) { face.innerHTML=diceFaceHTML(Math.floor(Math.random()*6)+1); sfxDice(); await sleep(50+i*3); }
   face.innerHTML=diceFaceHTML(result);
   btn.classList.remove('rolling');
 
@@ -675,12 +687,20 @@ async function movePlayer(player, steps) {
   const target=pos+steps;
 
   if (pos===0) {
-    for (let i=1; i<=steps; i++) { positions[player]=i; positionToken(player); sfxStep(); await sleep(130); }
+    // Enter the board
+    for (let i=1; i<=steps; i++) { positions[player]=i; positionToken(player); sfxStep(); await sleep(180); }
   } else if (target>100) {
-    showMessage(`Need exact roll — ${playerNames[player]} stays on ${pos}!`);
-    await sleep(600); return;
+    // BOUNCE-BACK: go to 100 then back the remaining amount
+    const overshoot = target - 100;
+    // First move up to 100
+    for (let i=pos+1; i<=100; i++) { positions[player]=i; positionToken(player); sfxStep(); await sleep(180); }
+    await sleep(200);
+    // Then bounce back
+    showMessage(`${playerNames[player]} bounces back from 100!`);
+    for (let i=1; i<=overshoot; i++) { positions[player]=100-i; positionToken(player); sfxStep(); await sleep(180); }
   } else {
-    for (let i=1; i<=steps; i++) { positions[player]=pos+i; positionToken(player); sfxStep(); await sleep(130); }
+    // Normal move
+    for (let i=1; i<=steps; i++) { positions[player]=pos+i; positionToken(player); sfxStep(); await sleep(180); }
   }
 
   const token=document.getElementById(`token-${player}`);
