@@ -9,313 +9,156 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐍</text></svg>">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   :root {
     --bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --p1-color: #3B82F6;
-    --p2-color: #EF4444;
-    --p3-color: #A855F7;
-    --p4-color: #22C55E;
+    --p1-color: #3B82F6; --p2-color: #EF4444; --p3-color: #A855F7; --p4-color: #22C55E;
   }
-
   body {
-    background: var(--bg);
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100dvh;
-    overflow-x: hidden;
-    -webkit-user-select: none;
-    user-select: none;
+    background: var(--bg); font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    display: flex; flex-direction: column; align-items: center; min-height: 100dvh;
+    overflow-x: hidden; -webkit-user-select: none; user-select: none;
     -webkit-tap-highlight-color: transparent;
   }
-
   .screen { display: none; flex-direction: column; align-items: center; width: 100%; max-width: 520px; padding: 16px; }
   .screen.active { display: flex; }
 
-  /* ─── MENU ─── */
+  /* MENU */
   #menu-screen { justify-content: center; min-height: 90dvh; gap: 12px; }
-  #menu-screen h1 { font-size: 2.5rem; margin-bottom: 0; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.3); }
-  #menu-screen .title-emoji { font-size: 3.5rem; animation: titleBounce 2s ease-in-out infinite; }
+  #menu-screen h1 { font-size: 2.5rem; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+  .title-emoji { font-size: 3.5rem; animation: titleBounce 2s ease-in-out infinite; }
   @keyframes titleBounce { 0%,100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-10px) rotate(5deg); } }
   #menu-screen .subtitle { color: rgba(255,255,255,0.85); font-size: 1rem; margin-bottom: 16px; font-weight: 600; }
-
   .name-setup { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; width: 290px; }
   .name-setup label { font-size: 0.9rem; font-weight: 700; color: rgba(255,255,255,0.9); }
   .name-row { display: flex; align-items: center; gap: 8px; }
   .name-row .color-dot { width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; border: 3px solid rgba(255,255,255,0.8); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-  .name-row input {
-    flex: 1; padding: 12px 16px; border: none; border-radius: 14px;
-    font-size: 1.05rem; font-family: inherit; color: #374151; background: rgba(255,255,255,0.95);
-    outline: none; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  }
+  .name-row input { flex: 1; padding: 12px 16px; border: none; border-radius: 14px; font-size: 1.05rem; font-family: inherit; color: #374151; background: rgba(255,255,255,0.95); outline: none; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
   .name-row input:focus { box-shadow: 0 0 0 3px rgba(255,255,255,0.5); }
-
   .player-count-row { display: flex; gap: 10px; margin-bottom: 8px; }
-  .player-count-btn {
-    width: 60px; height: 60px; border-radius: 16px; border: 3px solid rgba(255,255,255,0.3);
-    background: rgba(255,255,255,0.15); font-size: 1.6rem; font-weight: 800; color: #fff;
-    cursor: pointer; transition: all 0.15s; backdrop-filter: blur(4px);
-  }
+  .player-count-btn { width: 60px; height: 60px; border-radius: 16px; border: 3px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.15); font-size: 1.6rem; font-weight: 800; color: #fff; cursor: pointer; transition: all 0.15s; backdrop-filter: blur(4px); }
   .player-count-btn.selected { border-color: #fff; background: rgba(255,255,255,0.35); transform: scale(1.08); }
   .player-count-btn:active { transform: scale(0.95); }
-
-  .mode-btn {
-    width: 290px; padding: 18px 28px; border: none; border-radius: 18px;
-    background: linear-gradient(135deg, #f97316, #ef4444); font-size: 1.3rem; font-weight: 800;
-    color: #fff; cursor: pointer; box-shadow: 0 6px 24px rgba(239,68,68,0.4);
-    transition: all 0.15s; display: flex; align-items: center; justify-content: center; gap: 10px;
-  }
+  .mode-btn { width: 290px; padding: 18px 28px; border: none; border-radius: 18px; background: linear-gradient(135deg, #f97316, #ef4444); font-size: 1.3rem; font-weight: 800; color: #fff; cursor: pointer; box-shadow: 0 6px 24px rgba(239,68,68,0.4); transition: all 0.15s; display: flex; align-items: center; justify-content: center; gap: 10px; }
   .mode-btn:active { transform: scale(0.96); }
   .mode-btn .emoji { font-size: 1.7rem; }
 
-  /* ─── GAME ─── */
+  /* GAME */
   #game-screen { gap: 6px; padding: 8px 8px 16px; }
-
-  .top-bar {
-    display: flex; justify-content: space-between; align-items: center;
-    width: 100%; max-width: 520px; padding: 0 4px; margin-bottom: 4px;
-  }
-  .top-bar .turn-info {
-    font-size: 1.1rem; font-weight: 800; color: #fff; display: flex;
-    align-items: center; gap: 8px; text-shadow: 0 1px 4px rgba(0,0,0,0.3);
-  }
-  .top-bar .turn-dot {
-    width: 18px; height: 18px; border-radius: 50%; border: 3px solid #fff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3); animation: turnPulse 1.5s ease-in-out infinite;
-  }
-  @keyframes turnPulse { 0%,100% { box-shadow: 0 2px 8px rgba(0,0,0,0.3); } 50% { box-shadow: 0 0 16px rgba(255,255,255,0.6); } }
-  .top-bar button {
-    background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.4);
-    border-radius: 12px; padding: 8px 16px; font-size: 0.9rem; cursor: pointer;
-    color: #fff; font-weight: 700; backdrop-filter: blur(4px);
-  }
+  .top-bar { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 520px; padding: 0 4px; margin-bottom: 4px; }
+  .top-bar .turn-info { font-size: 1.15rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 10px; text-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+  .top-bar .turn-dot { width: 22px; height: 22px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 12px rgba(255,255,255,0.5); animation: turnGlow 1.2s ease-in-out infinite; }
+  @keyframes turnGlow { 0%,100% { box-shadow: 0 0 12px rgba(255,255,255,0.3); transform: scale(1); } 50% { box-shadow: 0 0 24px rgba(255,255,255,0.8); transform: scale(1.15); } }
+  .top-bar button { background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.4); border-radius: 12px; padding: 8px 16px; font-size: 0.9rem; cursor: pointer; color: #fff; font-weight: 700; backdrop-filter: blur(4px); }
   .top-bar button:active { background: rgba(255,255,255,0.3); }
 
-  /* ─── BOARD ─── */
-  .board-container {
-    position: relative; width: min(94vw, 500px); height: min(94vw, 500px);
-    border-radius: 16px; overflow: hidden;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.35), inset 0 0 0 4px rgba(255,255,255,0.1);
-  }
-
-  .board-grid {
-    display: grid; grid-template-columns: repeat(10, 1fr); grid-template-rows: repeat(10, 1fr);
-    width: 100%; height: 100%; border-radius: 14px; overflow: hidden;
-  }
-
-  .cell {
-    position: relative; display: flex; align-items: flex-start; justify-content: flex-start;
-    padding: 2px 3px; font-size: clamp(8px, 2.2vw, 12px); font-weight: 800; line-height: 1;
-    transition: background 0.3s;
-  }
-  .cell.c0 { background: #FFF9C4; color: rgba(0,0,0,0.3); }
-  .cell.c1 { background: #FFECB3; color: rgba(0,0,0,0.3); }
-  .cell.c2 { background: #C8E6C9; color: rgba(0,0,0,0.3); }
-  .cell.c3 { background: #B3E5FC; color: rgba(0,0,0,0.3); }
-  .cell.c4 { background: #F8BBD0; color: rgba(0,0,0,0.3); }
-  .cell.c5 { background: #E1BEE7; color: rgba(0,0,0,0.3); }
-  .cell.c6 { background: #FFE0B2; color: rgba(0,0,0,0.3); }
-  .cell.c7 { background: #B2DFDB; color: rgba(0,0,0,0.3); }
-  .cell.c8 { background: #FFCDD2; color: rgba(0,0,0,0.3); }
-  .cell.c9 { background: #D1C4E9; color: rgba(0,0,0,0.3); }
-
+  /* BOARD */
+  .board-container { position: relative; width: min(94vw, 500px); height: min(94vw, 500px); border-radius: 16px; overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,0.35), inset 0 0 0 4px rgba(255,255,255,0.1); }
+  .board-grid { display: grid; grid-template-columns: repeat(10, 1fr); grid-template-rows: repeat(10, 1fr); width: 100%; height: 100%; border-radius: 14px; overflow: hidden; }
+  .cell { position: relative; display: flex; align-items: flex-start; justify-content: flex-start; padding: 2px 3px; font-size: clamp(8px, 2.2vw, 12px); font-weight: 800; line-height: 1; }
   .cell.square-100 { background: linear-gradient(135deg, #FFD700, #FFA000) !important; }
-  .cell.square-100::after {
-    content: '⭐'; position: absolute; right: 1px; bottom: 0;
-    font-size: clamp(10px, 3vw, 18px); animation: starSpin 3s linear infinite;
-  }
+  .cell.square-100::after { content: '⭐'; position: absolute; right: 1px; bottom: 0; font-size: clamp(10px, 3vw, 18px); animation: starSpin 3s linear infinite; }
   @keyframes starSpin { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(1.2); } 100% { transform: rotate(360deg) scale(1); } }
 
-  /* ─── SVG OVERLAY ─── */
-  .board-svg {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;
-  }
+  .board-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
 
-  /* ─── TOKENS ─── */
-  .token {
-    position: absolute; width: 8%; height: 8%;
-    transition: left 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), top 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-    z-index: 10; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4)); pointer-events: none;
-  }
-  .token.sliding { transition: left 0.65s ease-in-out, top 0.65s ease-in-out; }
+  /* TOKENS */
+  .token { position: absolute; width: 8.5%; height: 8.5%; transition: left 0.35s cubic-bezier(0.34,1.56,0.64,1), top 0.35s cubic-bezier(0.34,1.56,0.64,1); z-index: 10; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4)); pointer-events: none; }
+  .token.sliding { transition: left 0.7s ease-in-out, top 0.7s ease-in-out; }
   .token.bounce { animation: tokenBounce 0.4s ease-out; }
-  @keyframes tokenBounce { 0% { transform: scale(1); } 40% { transform: scale(1.35); } 100% { transform: scale(1); } }
+  @keyframes tokenBounce { 0% { transform: scale(1); } 40% { transform: scale(1.4); } 100% { transform: scale(1); } }
+  .token.active-turn { filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4)) drop-shadow(0 0 10px rgba(255,255,255,0.7)); }
 
-  /* ─── CONTROLS ─── */
-  .controls {
-    display: flex; align-items: center; justify-content: center; gap: 16px;
-    margin-top: 8px; flex-wrap: wrap;
-  }
-
+  /* CONTROLS */
+  .controls { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 8px; flex-wrap: wrap; }
   .player-indicator { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 52px; }
-  .player-indicator .pip {
-    width: 34px; height: 34px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.8);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2); opacity: 0.4; transition: all 0.3s; position: relative;
-  }
-  .player-indicator .pip.active { opacity: 1; transform: scale(1.25); box-shadow: 0 0 20px rgba(255,255,255,0.4); }
-  .player-indicator .pip .pos-label {
-    position: absolute; bottom: -16px; left: 50%; transform: translateX(-50%);
-    font-size: 0.65rem; font-weight: 800; color: rgba(255,255,255,0.8); white-space: nowrap;
-  }
+  .player-indicator .pip { width: 34px; height: 34px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.8); box-shadow: 0 2px 8px rgba(0,0,0,0.2); opacity: 0.4; transition: all 0.3s; position: relative; }
+  .player-indicator .pip.active { opacity: 1; transform: scale(1.25); box-shadow: 0 0 20px rgba(255,255,255,0.5); }
+  .player-indicator .pip .pos-label { position: absolute; bottom: -16px; left: 50%; transform: translateX(-50%); font-size: 0.65rem; font-weight: 800; color: rgba(255,255,255,0.8); white-space: nowrap; }
   .player-indicator .name { font-size: 0.75rem; font-weight: 800; color: #fff; margin-top: 4px; text-shadow: 0 1px 3px rgba(0,0,0,0.3); }
 
   .dice-area { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-
-  .dice-btn {
-    width: 82px; height: 82px; border-radius: 50%; border: none;
-    background: linear-gradient(135deg, #f97316, #ef4444); cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 8px 24px rgba(239,68,68,0.45), inset 0 2px 0 rgba(255,255,255,0.2);
-    transition: all 0.1s; position: relative;
-  }
-  .dice-btn:active { transform: scale(0.9); box-shadow: 0 3px 12px rgba(239,68,68,0.3); }
+  .dice-btn { width: 84px; height: 84px; border-radius: 50%; border: none; background: linear-gradient(135deg, #f97316, #ef4444); cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(239,68,68,0.45), inset 0 2px 0 rgba(255,255,255,0.2); transition: all 0.1s; }
+  .dice-btn:active { transform: scale(0.9); }
   .dice-btn.disabled { opacity: 0.35; pointer-events: none; }
-  .dice-btn.six-glow {
-    box-shadow: 0 0 30px rgba(255,215,0,0.8), 0 0 60px rgba(255,215,0,0.4);
-    animation: sixPulse 0.6s ease-in-out 3;
-  }
-  @keyframes sixPulse { 0%,100% { box-shadow: 0 0 30px rgba(255,215,0,0.8); } 50% { box-shadow: 0 0 50px rgba(255,215,0,1); } }
-
-  .dice-face {
-    width: 54px; height: 54px; background: #fff; border-radius: 12px;
-    display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr);
-    padding: 6px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.08);
-  }
+  .dice-btn.six-glow { box-shadow: 0 0 30px rgba(255,215,0,0.8), 0 0 60px rgba(255,215,0,0.4); animation: sixPulse 0.5s ease-in-out 3; }
+  @keyframes sixPulse { 0%,100% { box-shadow: 0 0 30px rgba(255,215,0,0.8); } 50% { box-shadow: 0 0 60px rgba(255,215,0,1); } }
+  .dice-face { width: 56px; height: 56px; background: #fff; border-radius: 12px; display: grid; grid-template-columns: repeat(3,1fr); grid-template-rows: repeat(3,1fr); padding: 6px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.08); }
   .dice-face .dot { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
   .dice-face .dot.show::after { content: ''; width: 10px; height: 10px; background: #1F2937; border-radius: 50%; }
-
   .dice-btn.rolling .dice-face { animation: diceShake 0.5s ease-in-out; }
-  @keyframes diceShake {
-    0%, 100% { transform: rotate(0deg) scale(1); }
-    15% { transform: rotate(-20deg) scale(1.1); }
-    35% { transform: rotate(16deg) scale(0.92); }
-    55% { transform: rotate(-12deg) scale(1.05); }
-    75% { transform: rotate(7deg) scale(0.97); }
-  }
-
+  @keyframes diceShake { 0%,100% { transform: rotate(0deg) scale(1); } 15% { transform: rotate(-22deg) scale(1.12); } 35% { transform: rotate(18deg) scale(0.9); } 55% { transform: rotate(-14deg) scale(1.06); } 75% { transform: rotate(8deg) scale(0.96); } }
   .roll-hint { font-size: 0.75rem; color: rgba(255,255,255,0.7); font-weight: 700; animation: pulse 1.5s ease-in-out infinite; }
-  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
 
-  /* ─── MESSAGE ─── */
-  .message {
-    min-height: 28px; font-size: 1rem; color: #fff; font-weight: 700;
-    text-align: center; text-shadow: 0 1px 4px rgba(0,0,0,0.3);
-    padding: 4px 12px; transition: opacity 0.3s;
-  }
-  .message.snake-msg { color: #FCA5A5; }
-  .message.ladder-msg { color: #86EFAC; }
-  .message.six-msg { color: #FDE68A; }
+  /* MESSAGE */
+  .message { min-height: 30px; font-size: 1.05rem; color: #fff; font-weight: 700; text-align: center; text-shadow: 0 1px 4px rgba(0,0,0,0.3); padding: 4px 12px; transition: all 0.3s; }
+  .message.snake-msg { color: #FCA5A5; font-size: 1.15rem; }
+  .message.ladder-msg { color: #86EFAC; font-size: 1.15rem; }
+  .message.six-msg { color: #FDE68A; font-size: 1.15rem; }
+  .message.triple-msg { color: #FDE68A; font-size: 1.3rem; animation: tripleShake 0.5s ease-in-out 3; }
+  @keyframes tripleShake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
 
-  /* ─── WIN OVERLAY ─── */
-  .win-overlay {
-    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.6); z-index: 100; flex-direction: column;
-    align-items: center; justify-content: center; gap: 16px; backdrop-filter: blur(4px);
-  }
+  /* WIN */
+  .win-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 100; flex-direction: column; align-items: center; justify-content: center; gap: 16px; backdrop-filter: blur(4px); }
   .win-overlay.active { display: flex; }
-  .win-overlay .win-card {
-    background: linear-gradient(135deg, #fff, #FFF9C4); border-radius: 28px;
-    padding: 40px 48px; text-align: center; box-shadow: 0 12px 60px rgba(0,0,0,0.4);
-    animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); max-width: 90vw;
-  }
-  @keyframes popIn { 0% { transform: scale(0.3) rotate(-10deg); opacity: 0; } 100% { transform: scale(1) rotate(0deg); opacity: 1; } }
+  .win-overlay .win-card { background: linear-gradient(135deg, #fff, #FFF9C4); border-radius: 28px; padding: 40px 48px; text-align: center; box-shadow: 0 12px 60px rgba(0,0,0,0.4); animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1); max-width: 90vw; }
+  @keyframes popIn { 0% { transform: scale(0.3) rotate(-10deg); opacity: 0; } 100% { transform: scale(1) rotate(0); opacity: 1; } }
   .win-overlay h2 { font-size: 2rem; margin: 10px 0; }
   .win-overlay .trophy { font-size: 5rem; animation: trophyBounce 0.8s ease-in-out 0.3s; }
   @keyframes trophyBounce { 0%,100% { transform: translateY(0) rotate(0); } 30% { transform: translateY(-25px) rotate(-10deg); } 60% { transform: translateY(-10px) rotate(5deg); } }
   .win-overlay .subtitle { color: #6B7280; margin-top: 4px; font-size: 1.1rem; font-weight: 600; }
-  .win-overlay button {
-    margin-top: 18px; padding: 16px 40px; border: none; border-radius: 16px;
-    background: linear-gradient(135deg, #f97316, #ef4444); color: #fff;
-    font-size: 1.15rem; font-weight: 800; cursor: pointer;
-    box-shadow: 0 6px 20px rgba(239,68,68,0.35);
-  }
+  .win-overlay button { margin-top: 18px; padding: 16px 40px; border: none; border-radius: 16px; background: linear-gradient(135deg, #f97316, #ef4444); color: #fff; font-size: 1.15rem; font-weight: 800; cursor: pointer; box-shadow: 0 6px 20px rgba(239,68,68,0.35); }
   .win-overlay button:active { transform: scale(0.95); }
 
-  /* ─── CONFETTI ─── */
+  /* CONFETTI */
   .confetti-piece { position: fixed; z-index: 200; animation: confettiFall linear forwards; pointer-events: none; }
   @keyframes confettiFall { 0% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); } 100% { opacity: 0; transform: translateY(100vh) rotate(720deg) scale(0.4); } }
 
-  /* ─── SNAKE IDLE ANIMATION ─── */
-  @keyframes snakeWiggle {
-    0%, 100% { transform: translate(0, 0); }
-    25% { transform: translate(1px, 0); }
-    75% { transform: translate(-1px, 0); }
-  }
-  .snake-group { animation: snakeWiggle 4s ease-in-out infinite; }
-  .snake-group:nth-child(odd) { animation-delay: -2s; }
+  /* SNAKE WIGGLE */
+  @keyframes snakeWiggle { 0%,100% { transform: translate(0,0); } 33% { transform: translate(1.5px, 0.5px); } 66% { transform: translate(-1.5px, -0.5px); } }
 
-  @media (max-width: 380px) {
-    .dice-btn { width: 66px; height: 66px; }
-    .dice-face { width: 44px; height: 44px; padding: 5px; }
-    .dice-face .dot.show::after { width: 8px; height: 8px; }
-    .player-indicator .pip { width: 28px; height: 28px; }
-  }
+  /* MEGA GLOW */
+  @keyframes megaGlow { 0%,100% { filter: drop-shadow(0 0 4px rgba(255,215,0,0.4)); } 50% { filter: drop-shadow(0 0 12px rgba(255,215,0,0.8)); } }
+
+  @media (max-width: 380px) { .dice-btn { width: 68px; height: 68px; } .dice-face { width: 46px; height: 46px; padding: 5px; } .dice-face .dot.show::after { width: 8px; height: 8px; } .player-indicator .pip { width: 28px; height: 28px; } }
   @media (min-height: 900px) { #game-screen { gap: 10px; } }
 </style>
 </head>
 <body>
 
-<!-- MENU -->
 <div id="menu-screen" class="screen active">
   <div class="title-emoji">🐍🪜</div>
   <h1>Snakes & Ladders</h1>
   <p class="subtitle">Family Edition ✨ Zero Ads Forever!</p>
-
   <div class="name-setup" id="name-setup">
     <label>Who's playing?</label>
-    <div class="name-row">
-      <div class="color-dot" style="background:var(--p1-color)"></div>
-      <input type="text" id="name-0" value="Ellie" maxlength="12" autocomplete="off">
-    </div>
-    <div class="name-row">
-      <div class="color-dot" style="background:var(--p2-color)"></div>
-      <input type="text" id="name-1" value="Daddy" maxlength="12" autocomplete="off">
-    </div>
-    <div class="name-row extra-player" style="display:none">
-      <div class="color-dot" style="background:var(--p3-color)"></div>
-      <input type="text" id="name-2" value="Player 3" maxlength="12" autocomplete="off">
-    </div>
-    <div class="name-row extra-player" style="display:none">
-      <div class="color-dot" style="background:var(--p4-color)"></div>
-      <input type="text" id="name-3" value="Player 4" maxlength="12" autocomplete="off">
-    </div>
+    <div class="name-row"><div class="color-dot" style="background:var(--p1-color)"></div><input type="text" id="name-0" value="Ellie" maxlength="12" autocomplete="off"></div>
+    <div class="name-row"><div class="color-dot" style="background:var(--p2-color)"></div><input type="text" id="name-1" value="Daddy" maxlength="12" autocomplete="off"></div>
+    <div class="name-row extra-player" style="display:none"><div class="color-dot" style="background:var(--p3-color)"></div><input type="text" id="name-2" value="Player 3" maxlength="12" autocomplete="off"></div>
+    <div class="name-row extra-player" style="display:none"><div class="color-dot" style="background:var(--p4-color)"></div><input type="text" id="name-3" value="Player 4" maxlength="12" autocomplete="off"></div>
   </div>
-
   <label style="font-size:0.9rem;font-weight:700;color:rgba(255,255,255,0.9);margin-bottom:4px;">Players</label>
   <div class="player-count-row">
     <button class="player-count-btn selected" onclick="setPlayerCount(2)">2</button>
     <button class="player-count-btn" onclick="setPlayerCount(3)">3</button>
     <button class="player-count-btn" onclick="setPlayerCount(4)">4</button>
   </div>
-
-  <button class="mode-btn" onclick="startGame()" style="margin-top:14px">
-    <span class="emoji">🎲</span> Let's Play!
-  </button>
+  <button class="mode-btn" onclick="startGame()" style="margin-top:14px"><span class="emoji">🎲</span> Let's Play!</button>
 </div>
 
-<!-- GAME -->
 <div id="game-screen" class="screen">
   <div class="top-bar">
-    <div class="turn-info">
-      <span class="turn-dot" id="turn-dot"></span>
-      <span id="turn-label">Ellie's turn</span>
-    </div>
+    <div class="turn-info"><span class="turn-dot" id="turn-dot"></span><span id="turn-label">Ellie's turn</span></div>
     <button onclick="goToMenu()">🏠 Menu</button>
   </div>
-
   <div class="board-container" id="board-container">
     <div class="board-grid" id="board-grid"></div>
     <svg class="board-svg" id="board-svg" viewBox="0 0 500 500" preserveAspectRatio="xMidYMid meet"></svg>
   </div>
-
   <div class="message" id="message">Tap the dice to roll!</div>
-
   <div class="controls" id="controls"></div>
 </div>
 
-<!-- WIN -->
 <div class="win-overlay" id="win-overlay">
   <div class="win-card">
     <div class="trophy">🏆</div>
@@ -326,146 +169,105 @@
 </div>
 
 <script>
-// ═══════════════════════════════════════
-// CONFIG
-// ═══════════════════════════════════════
-const PLAYER_COLORS = ['#3B82F6', '#EF4444', '#A855F7', '#22C55E'];
-const DEFAULT_NAMES = ['Ellie', 'Daddy', 'Player 3', 'Player 4'];
+const PLAYER_COLORS = ['#3B82F6','#EF4444','#A855F7','#22C55E'];
+const DEFAULT_NAMES = ['Ellie','Daddy','Player 3','Player 4'];
 
-// Board colour palette per row (bottom to top) — warm rainbow gradient
+// Temperature-zoned board: cool bottom → warm middle → hot danger zone top
+// Row 0 = squares 1-10 (bottom), Row 9 = squares 91-100 (top)
 const ROW_COLORS = [
-  ['#FFF9C4','#FFECB3'],  // row 0 (1-10): warm yellow
-  ['#FFE0B2','#FFCCBC'],  // row 1 (11-20): peach
-  ['#FFCDD2','#F8BBD0'],  // row 2 (21-30): pink
-  ['#F8BBD0','#E1BEE7'],  // row 3 (31-40): rose → lavender
-  ['#E1BEE7','#D1C4E9'],  // row 4 (41-50): lavender
-  ['#C5CAE9','#BBDEFB'],  // row 5 (51-60): indigo → blue
-  ['#B3E5FC','#B2EBF2'],  // row 6 (61-70): sky blue
-  ['#B2DFDB','#C8E6C9'],  // row 7 (71-80): teal → green
-  ['#C8E6C9','#DCEDC8'],  // row 8 (81-90): green → lime
-  ['#FFF9C4','#FFF176'],  // row 9 (91-100): golden finish
+  ['#DBEAFE','#C7D2FE'],  // row 0: cool blue
+  ['#C7D2FE','#DDD6FE'],  // row 1: blue-lavender
+  ['#E0E7FF','#EDE9FE'],  // row 2: lavender
+  ['#DDD6FE','#F5D0FE'],  // row 3: lavender-pink
+  ['#FBE8F0','#FDE68A'],  // row 4: pink → warm
+  ['#FEF3C7','#FDE68A'],  // row 5: warm yellow
+  ['#FDE68A','#FED7AA'],  // row 6: yellow → orange
+  ['#FFEDD5','#FED7AA'],  // row 7: warm orange
+  ['#FECACA','#FCA5A5'],  // row 8: red — danger approaching
+  ['#FCA5A5','#F87171'],  // row 9: HOT red — danger zone!
 ];
 
-// Snakes: head → tail (well-distributed, non-overlapping, gameplay-balanced)
+// Mika's 7+7 element map — narrative arc: hope → tension → dramatic finish
 const SNAKES = {
-  99: 54,  // top row snake — big penalty
-  92: 51,  // another top area
-  85: 59,  // mid-high
-  78: 42,  // mid
-  74: 36,  // mid
-  62: 18,  // big drop
-  48: 11,  // low-mid
-  47: 26,  // low-mid
-  35: 5,   // low
-  16: 4    // early board
+  98: 8,   // THE VILLAIN SNAKE 😈 — mega drop, biggest on board
+  96: 42,  // Danger zone — big drop
+  92: 68,  // Danger zone — moderate
+  74: 53,  // Guard the upper board
+  62: 38,  // Mid-board — pairs with top snakes as landing zone
+  49: 31,  // Mid-board drama
+  16: 6    // Early setback (gentle)
 };
 
-// Ladders: bottom → top (spread nicely)
 const LADDERS = {
-  2: 23,   // early boost
-  6: 25,   // early boost
-  15: 44,  // low → mid
-  21: 39,  // low → mid
-  28: 56,  // mid climb
-  36: 57,  // mid climb
-  43: 77,  // mid → high
-  50: 69,  // mid → high
-  71: 89,  // high climb
-  80: 97   // near the top
+  4: 56,   // MEGA LADDER — early excitement, biggest on board
+  21: 42,  // Mid-board boost
+  36: 57,  // Comeback corridor
+  47: 73,  // Push into danger zone
+  54: 74,  // Comeback corridor exit
+  65: 86,  // Final approach
+  80: 100  // THE MAGIC LADDER 🌟 — land here and WIN!
 };
 
-// Snake visual theme colours
+// Snakes: all red/warm-toned (friend-or-foe instant recognition)
 const SNAKE_THEMES = [
-  { body: '#16A34A', belly: '#4ADE80', head: '#15803D', spots: '#166534', tongue: '#DC2626' },
-  { body: '#7C3AED', belly: '#A78BFA', head: '#6D28D9', spots: '#4C1D95', tongue: '#F43F5E' },
-  { body: '#0891B2', belly: '#67E8F9', head: '#0E7490', spots: '#155E75', tongue: '#FB923C' },
-  { body: '#DC2626', belly: '#FCA5A5', head: '#B91C1C', spots: '#7F1D1D', tongue: '#FDE047' },
-  { body: '#EA580C', belly: '#FDBA74', head: '#C2410C', spots: '#7C2D12', tongue: '#F43F5E' },
-  { body: '#0D9488', belly: '#5EEAD4', head: '#0F766E', spots: '#134E4A', tongue: '#FB7185' },
-  { body: '#2563EB', belly: '#93C5FD', head: '#1D4ED8', spots: '#1E3A8A', tongue: '#FCA5A5' },
-  { body: '#CA8A04', belly: '#FDE047', head: '#A16207', spots: '#713F12', tongue: '#F87171' },
-  { body: '#DB2777', belly: '#F9A8D4', head: '#BE185D', spots: '#831843', tongue: '#A3E635' },
-  { body: '#059669', belly: '#6EE7B7', head: '#047857', spots: '#064E3B', tongue: '#F87171' },
+  { body: '#DC2626', belly: '#FCA5A5', head: '#B91C1C', spots: '#7F1D1D', tongue: '#FDE047', isMega: true },   // 98→8 VILLAIN
+  { body: '#E11D48', belly: '#FDA4AF', head: '#BE123C', spots: '#881337', tongue: '#FDE047', isMega: false },  // 96→42
+  { body: '#EA580C', belly: '#FDBA74', head: '#C2410C', spots: '#7C2D12', tongue: '#FDE047', isMega: false },  // 92→68
+  { body: '#DB2777', belly: '#F9A8D4', head: '#BE185D', spots: '#831843', tongue: '#A3E635', isMega: false },  // 74→53
+  { body: '#D97706', belly: '#FDE68A', head: '#B45309', spots: '#78350F', tongue: '#F87171', isMega: false },  // 62→38
+  { body: '#DC2626', belly: '#FECACA', head: '#991B1B', spots: '#7F1D1D', tongue: '#FDE047', isMega: false },  // 49→31
+  { body: '#F97316', belly: '#FED7AA', head: '#EA580C', spots: '#9A3412', tongue: '#F87171', isMega: false },  // 16→6
 ];
 
-// Ladder colours
+// Ladders: all green/gold-toned
 const LADDER_THEMES = [
-  { rail: '#F97316', rung: '#FDBA74' },
-  { rail: '#3B82F6', rung: '#93C5FD' },
-  { rail: '#EF4444', rung: '#FCA5A5' },
-  { rail: '#8B5CF6', rung: '#C4B5FD' },
-  { rail: '#10B981', rung: '#6EE7B7' },
-  { rail: '#EC4899', rung: '#F9A8D4' },
-  { rail: '#F59E0B', rung: '#FDE68A' },
-  { rail: '#06B6D4', rung: '#67E8F9' },
-  { rail: '#6366F1', rung: '#A5B4FC' },
-  { rail: '#14B8A6', rung: '#5EEAD4' },
+  { rail: '#059669', rung: '#6EE7B7', isMega: true },   // 4→56 MEGA
+  { rail: '#16A34A', rung: '#86EFAC', isMega: false },  // 21→42
+  { rail: '#0D9488', rung: '#5EEAD4', isMega: false },  // 36→57
+  { rail: '#15803D', rung: '#4ADE80', isMega: false },  // 47→73
+  { rail: '#059669', rung: '#6EE7B7', isMega: false },  // 54→74
+  { rail: '#16A34A', rung: '#86EFAC', isMega: false },  // 65→86
+  { rail: '#CA8A04', rung: '#FDE047', isMega: true },   // 80→100 MAGIC ⭐
 ];
 
-// ═══════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════
-let numPlayers = 2;
-let playerNames = [...DEFAULT_NAMES];
-let positions = [];
-let currentPlayer = 0;
-let rolling = false;
-let gameOver = false;
+let numPlayers = 2, playerNames = [...DEFAULT_NAMES], positions = [];
+let currentPlayer = 0, rolling = false, gameOver = false;
+let consecutiveSixes = 0;
 
-// ═══════════════════════════════════════
-// AUDIO
-// ═══════════════════════════════════════
+// ─── AUDIO ───
 let audioCtx;
-function getAudio() {
-  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  return audioCtx;
+function getAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); return audioCtx; }
+function playTone(freq, dur, type='sine', vol=0.12) {
+  try { const ctx=getAudio(), o=ctx.createOscillator(), g=ctx.createGain(); o.type=type; o.frequency.value=freq; g.gain.value=vol; g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur); o.connect(g).connect(ctx.destination); o.start(); o.stop(ctx.currentTime+dur); } catch(e){}
+}
+function sfxDice() { playTone(350,0.06,'square',0.08); setTimeout(()=>playTone(450,0.06,'square',0.08),50); }
+function sfxStep() { playTone(660,0.05,'sine',0.07); }
+function sfxSnake() { playTone(250,0.25,'sawtooth',0.08); setTimeout(()=>playTone(180,0.35,'sawtooth',0.06),150); setTimeout(()=>playTone(120,0.3,'sawtooth',0.04),350); }
+function sfxLadder() { [0,90,180,270].forEach((d,i)=>setTimeout(()=>playTone(440+i*110,0.12,'sine',0.09),d)); }
+function sfxWin() { [0,100,200,300,400,500].forEach((d,i)=>setTimeout(()=>playTone(350+i*70,0.22,'sine',0.1),d)); }
+function sfxSix() { playTone(880,0.12,'sine',0.1); setTimeout(()=>playTone(1100,0.12,'sine',0.1),80); setTimeout(()=>playTone(1320,0.15,'sine',0.1),160); }
+function sfxTripleSix() {
+  // Silly fanfare for triple 6!
+  const notes = [523,659,784,1047,784,1047,1319];
+  notes.forEach((f,i)=>setTimeout(()=>playTone(f,0.15,'sine',0.12),i*100));
+}
+function sfxMegaSnake() {
+  // Dramatic descending doom
+  [0,80,160,240,320,400].forEach((d,i)=>setTimeout(()=>playTone(400-i*50,0.2,'sawtooth',0.08),d));
+}
+function sfxMegaLadder() {
+  // Triumphant ascending
+  [0,80,160,240,320,400,480].forEach((d,i)=>setTimeout(()=>playTone(300+i*80,0.15,'sine',0.1),d));
 }
 
-function playTone(freq, dur, type = 'sine', vol = 0.12) {
-  try {
-    const ctx = getAudio();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = type;
-    osc.frequency.value = freq;
-    gain.gain.value = vol;
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
-    osc.connect(gain).connect(ctx.destination);
-    osc.start(); osc.stop(ctx.currentTime + dur);
-  } catch(e) {}
-}
-
-function sfxDice() { playTone(350, 0.06, 'square', 0.08); setTimeout(() => playTone(450, 0.06, 'square', 0.08), 50); }
-function sfxStep() { playTone(660, 0.05, 'sine', 0.07); }
-function sfxSnake() {
-  playTone(250, 0.25, 'sawtooth', 0.08);
-  setTimeout(() => playTone(180, 0.35, 'sawtooth', 0.06), 150);
-  setTimeout(() => playTone(120, 0.3, 'sawtooth', 0.04), 350);
-}
-function sfxLadder() { [0,90,180,270].forEach((d,i) => setTimeout(() => playTone(440 + i*110, 0.12, 'sine', 0.09), d)); }
-function sfxWin() { [0,100,200,300,400,500].forEach((d,i) => setTimeout(() => playTone(350 + i*70, 0.22, 'sine', 0.1), d)); }
-function sfxSix() {
-  playTone(880, 0.12, 'sine', 0.1);
-  setTimeout(() => playTone(1100, 0.12, 'sine', 0.1), 80);
-  setTimeout(() => playTone(1320, 0.15, 'sine', 0.1), 160);
-}
-
-// ═══════════════════════════════════════
-// MENU
-// ═══════════════════════════════════════
+// ─── MENU ───
 function setPlayerCount(n) {
   numPlayers = n;
-  document.querySelectorAll('.player-count-btn').forEach((btn, i) => {
-    btn.classList.toggle('selected', i + 2 === n);
-  });
-  document.querySelectorAll('.extra-player').forEach((row, i) => {
-    row.style.display = (i + 2 < n) ? 'flex' : 'none';
-  });
+  document.querySelectorAll('.player-count-btn').forEach((btn,i)=>btn.classList.toggle('selected',i+2===n));
+  document.querySelectorAll('.extra-player').forEach((row,i)=>row.style.display=(i+2<n)?'flex':'none');
 }
 
-// ═══════════════════════════════════════
-// BOARD
-// ═══════════════════════════════════════
+// ─── BOARD ───
 function buildBoard() {
   const grid = document.getElementById('board-grid');
   grid.innerHTML = '';
@@ -474,11 +276,17 @@ function buildBoard() {
       const num = getSquareNumber(row, col);
       const cell = document.createElement('div');
       const colors = ROW_COLORS[row];
-      const bg = col % 2 === 0 ? colors[0] : colors[1];
       cell.className = 'cell';
-      cell.style.background = bg;
-      cell.style.color = 'rgba(0,0,0,0.28)';
+      cell.style.background = col%2===0 ? colors[0] : colors[1];
+      cell.style.color = 'rgba(0,0,0,0.22)';
       if (num === 100) cell.classList.add('square-100');
+      // Mark snake heads and ladder bases with subtle icons
+      if (SNAKES[num]) {
+        cell.style.color = 'rgba(220,38,38,0.35)';
+      }
+      if (LADDERS[num]) {
+        cell.style.color = 'rgba(22,163,74,0.35)';
+      }
       cell.textContent = num;
       cell.dataset.num = num;
       grid.appendChild(cell);
@@ -487,480 +295,416 @@ function buildBoard() {
 }
 
 function getSquareNumber(row, col) {
-  if (row % 2 === 0) return row * 10 + col + 1;
-  return row * 10 + (10 - col);
+  return row%2===0 ? row*10+col+1 : row*10+(10-col);
 }
 
 function getSquarePos(num) {
   if (num < 1) return { x: 0.05, y: 1.08 };
-  const row = Math.floor((num - 1) / 10);
-  const posInRow = (num - 1) % 10;
-  const col = (row % 2 === 0) ? posInRow : (9 - posInRow);
-  return { x: (col + 0.5) / 10, y: 1 - (row + 0.5) / 10 };
+  const row = Math.floor((num-1)/10);
+  const posInRow = (num-1)%10;
+  const col = row%2===0 ? posInRow : 9-posInRow;
+  return { x: (col+0.5)/10, y: 1-(row+0.5)/10 };
 }
 
-// ═══════════════════════════════════════
-// DRAW SNAKES & LADDERS (SVG)
-// ═══════════════════════════════════════
+// ─── DRAW SNAKES & LADDERS ───
 function drawSnakesAndLadders() {
   const svg = document.getElementById('board-svg');
   svg.innerHTML = '';
-
-  const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+  const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
   svg.appendChild(defs);
 
-  // Draw ladders first (behind snakes)
-  Object.entries(LADDERS).forEach(([bottom, top], idx) => {
-    drawLadder(svg, +bottom, +top, LADDER_THEMES[idx % LADDER_THEMES.length]);
+  // Ladders first (behind snakes)
+  Object.entries(LADDERS).forEach(([bottom,top],idx) => {
+    drawLadder(svg, +bottom, +top, LADDER_THEMES[idx]);
   });
-  // Draw snakes on top
-  Object.entries(SNAKES).forEach(([head, tail], idx) => {
-    drawSnake(svg, +head, +tail, SNAKE_THEMES[idx % SNAKE_THEMES.length]);
+  // Snakes on top
+  Object.entries(SNAKES).forEach(([head,tail],idx) => {
+    drawSnake(svg, +head, +tail, SNAKE_THEMES[idx]);
   });
 }
 
 function drawLadder(svg, from, to, theme) {
-  const p1 = getSquarePos(from), p2 = getSquarePos(to);
-  const x1 = p1.x * 500, y1 = p1.y * 500;
-  const x2 = p2.x * 500, y2 = p2.y * 500;
-  const dx = x2 - x1, dy = y2 - y1;
-  const len = Math.sqrt(dx * dx + dy * dy);
-  const nx = -dy / len * 11, ny = dx / len * 11;
+  const p1=getSquarePos(from), p2=getSquarePos(to);
+  const x1=p1.x*500, y1=p1.y*500, x2=p2.x*500, y2=p2.y*500;
+  const dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy);
+  const nx=-dy/len, ny=dx/len;
+  const railW = theme.isMega ? 14 : 11;
+  const strokeW = theme.isMega ? 6 : 4.5;
+  const rungW = theme.isMega ? 4.5 : 3.5;
 
-  const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  g.setAttribute('opacity', '0.88');
+  const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+  g.setAttribute('opacity','0.92');
+  if (theme.isMega) g.style.animation = 'megaGlow 2s ease-in-out infinite';
 
-  // Outer shadow
-  for (const sign of [-1, 1]) {
-    const sh = makeLine(x1 + nx*sign + 1.5, y1 + ny*sign + 1.5, x2 + nx*sign + 1.5, y2 + ny*sign + 1.5);
-    sh.setAttribute('stroke', 'rgba(0,0,0,0.12)');
-    sh.setAttribute('stroke-width', '6');
-    sh.setAttribute('stroke-linecap', 'round');
-    g.appendChild(sh);
+  // Shadow
+  for (const s of [-1,1]) {
+    const sh = makeLine(x1+nx*railW/2*s+2, y1+ny*railW/2*s+2, x2+nx*railW/2*s+2, y2+ny*railW/2*s+2);
+    sh.setAttribute('stroke','rgba(0,0,0,0.12)'); sh.setAttribute('stroke-width', strokeW+2);
+    sh.setAttribute('stroke-linecap','round'); g.appendChild(sh);
   }
 
-  // Rails (thick, rounded)
-  for (const sign of [-1, 1]) {
-    const rail = makeLine(x1 + nx*sign, y1 + ny*sign, x2 + nx*sign, y2 + ny*sign);
-    rail.setAttribute('stroke', theme.rail);
-    rail.setAttribute('stroke-width', '5');
-    rail.setAttribute('stroke-linecap', 'round');
-    g.appendChild(rail);
-
-    // Highlight on left rail
-    if (sign === -1) {
-      const highlight = makeLine(x1 + nx*sign - 1, y1 + ny*sign - 1, x2 + nx*sign - 1, y2 + ny*sign - 1);
-      highlight.setAttribute('stroke', 'rgba(255,255,255,0.35)');
-      highlight.setAttribute('stroke-width', '2');
-      highlight.setAttribute('stroke-linecap', 'round');
-      g.appendChild(highlight);
+  // Rails
+  for (const s of [-1,1]) {
+    const rail = makeLine(x1+nx*railW/2*s, y1+ny*railW/2*s, x2+nx*railW/2*s, y2+ny*railW/2*s);
+    rail.setAttribute('stroke', theme.rail); rail.setAttribute('stroke-width', strokeW);
+    rail.setAttribute('stroke-linecap','round'); g.appendChild(rail);
+    // Highlight
+    if (s === -1) {
+      const hl = makeLine(x1+nx*railW/2*s-1, y1+ny*railW/2*s-1, x2+nx*railW/2*s-1, y2+ny*railW/2*s-1);
+      hl.setAttribute('stroke','rgba(255,255,255,0.3)'); hl.setAttribute('stroke-width','2');
+      hl.setAttribute('stroke-linecap','round'); g.appendChild(hl);
     }
   }
 
   // Rungs
-  const numRungs = Math.max(3, Math.round(len / 25));
+  const numRungs = Math.max(3, Math.round(len/22));
   for (let i = 1; i <= numRungs; i++) {
-    const t = i / (numRungs + 1);
-    const rx = x1 + dx * t, ry = y1 + dy * t;
-    // Shadow
-    const rSh = makeLine(rx + nx + 1, ry + ny + 1, rx - nx + 1, ry - ny + 1);
-    rSh.setAttribute('stroke', 'rgba(0,0,0,0.08)');
-    rSh.setAttribute('stroke-width', '4');
-    rSh.setAttribute('stroke-linecap', 'round');
-    g.appendChild(rSh);
-    // Rung
-    const rung = makeLine(rx + nx, ry + ny, rx - nx, ry - ny);
-    rung.setAttribute('stroke', theme.rung);
-    rung.setAttribute('stroke-width', '3.5');
-    rung.setAttribute('stroke-linecap', 'round');
-    g.appendChild(rung);
+    const t = i/(numRungs+1);
+    const rx=x1+dx*t, ry=y1+dy*t;
+    const rSh = makeLine(rx+nx*railW/2+1, ry+ny*railW/2+1, rx-nx*railW/2+1, ry-ny*railW/2+1);
+    rSh.setAttribute('stroke','rgba(0,0,0,0.06)'); rSh.setAttribute('stroke-width', rungW+1);
+    rSh.setAttribute('stroke-linecap','round'); g.appendChild(rSh);
+    const rung = makeLine(rx+nx*railW/2, ry+ny*railW/2, rx-nx*railW/2, ry-ny*railW/2);
+    rung.setAttribute('stroke', theme.rung); rung.setAttribute('stroke-width', rungW);
+    rung.setAttribute('stroke-linecap','round'); g.appendChild(rung);
   }
 
-  // Sparkle at top
-  const sparkle = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-  sparkle.setAttribute('x', x2); sparkle.setAttribute('y', y2 - 6);
-  sparkle.setAttribute('font-size', '12');
-  sparkle.setAttribute('text-anchor', 'middle');
-  sparkle.textContent = '✨';
-  g.appendChild(sparkle);
+  // Icon at top
+  const icon = document.createElementNS('http://www.w3.org/2000/svg','text');
+  icon.setAttribute('x', x2); icon.setAttribute('y', y2 - 8);
+  icon.setAttribute('font-size', theme.isMega ? '16' : '12');
+  icon.setAttribute('text-anchor','middle');
+  icon.textContent = theme.isMega && to === 100 ? '🌟' : '✨';
+  g.appendChild(icon);
 
   svg.appendChild(g);
 }
 
 function drawSnake(svg, head, tail, theme) {
-  const p1 = getSquarePos(head), p2 = getSquarePos(tail);
-  const x1 = p1.x * 500, y1 = p1.y * 500;
-  const x2 = p2.x * 500, y2 = p2.y * 500;
-  const dx = x2 - x1, dy = y2 - y1;
-  const len = Math.sqrt(dx * dx + dy * dy);
+  const p1=getSquarePos(head), p2=getSquarePos(tail);
+  const x1=p1.x*500, y1=p1.y*500, x2=p2.x*500, y2=p2.y*500;
+  const dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy);
+  const perpX=-dy/len, perpY=dx/len;
 
-  // Use deterministic "random" for consistent wave shape
-  const seed = head * 137;
-  const r1 = ((seed * 17 + 31) % 100) / 100;
-  const r2 = ((seed * 23 + 47) % 100) / 100;
+  // S-curve waviness
+  const seed = head*137;
+  const r1=((seed*17+31)%100)/100, r2=((seed*23+47)%100)/100;
+  const wave1 = (30+r1*25) * (r1>0.5?1:-1);
+  const wave2 = (30+r2*25) * (r2>0.5?-1:1);
 
-  // S-curve with multiple control points for a wavier body
-  const perpX = -dy / len;
-  const perpY = dx / len;
-  const wave1 = (25 + r1 * 30) * (r1 > 0.5 ? 1 : -1);
-  const wave2 = (25 + r2 * 30) * (r2 > 0.5 ? -1 : 1);
+  // Build path with 3 curves for a wiggly body
+  const mx = x1+dx*0.33, my = y1+dy*0.33;
+  const mx2 = x1+dx*0.66, my2 = y1+dy*0.66;
+  const c1x = x1+dx*0.15+perpX*wave1, c1y = y1+dy*0.15+perpY*wave1;
+  const c2x = x1+dx*0.3+perpX*wave2*0.5, c2y = y1+dy*0.3+perpY*wave2*0.5;
+  const c3x = x1+dx*0.45+perpX*wave2, c3y = y1+dy*0.45+perpY*wave2;
+  const c4x = x1+dx*0.55+perpX*wave1*0.5, c4y = y1+dy*0.55+perpY*wave1*0.5;
+  const c5x = x1+dx*0.7+perpX*wave1*0.7, c5y = y1+dy*0.7+perpY*wave1*0.7;
+  const c6x = x1+dx*0.85+perpX*wave2*0.3, c6y = y1+dy*0.85+perpY*wave2*0.3;
 
-  const cx1 = x1 + dx * 0.25 + perpX * wave1;
-  const cy1 = y1 + dy * 0.25 + perpY * wave1;
-  const cx2 = x1 + dx * 0.5 + perpX * wave2;
-  const cy2 = y1 + dy * 0.5 + perpY * wave2;
-  const cx3 = x1 + dx * 0.75 + perpX * wave1 * 0.6;
-  const cy3 = y1 + dy * 0.75 + perpY * wave1 * 0.6;
+  const d = `M ${x1} ${y1} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${mx} ${my} S ${c4x} ${c4y}, ${mx2} ${my2} S ${c6x} ${c6y}, ${x2} ${y2}`;
 
-  const d = `M ${x1} ${y1} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${x1 + dx*0.5} ${y1 + dy*0.5} S ${cx3} ${cy3}, ${x2} ${y2}`;
+  const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+  const bodyW = theme.isMega ? 16 : 11;
+  const bellyW = theme.isMega ? 7 : 5;
+  const headR = theme.isMega ? 13 : 10;
 
-  const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  g.classList.add('snake-group');
-  g.setAttribute('opacity', '0.92');
+  g.style.animation = `snakeWiggle ${3+r1*2}s ease-in-out infinite`;
+  g.style.animationDelay = `${-r2*3}s`;
+  g.setAttribute('opacity','0.94');
 
   // Body shadow
   const shadow = makePath(d);
-  shadow.setAttribute('stroke', 'rgba(0,0,0,0.15)');
-  shadow.setAttribute('stroke-width', '14');
-  shadow.setAttribute('fill', 'none');
-  shadow.setAttribute('stroke-linecap', 'round');
-  shadow.setAttribute('transform', 'translate(2,2)');
-  g.appendChild(shadow);
+  shadow.setAttribute('stroke','rgba(0,0,0,0.18)'); shadow.setAttribute('stroke-width', bodyW+4);
+  shadow.setAttribute('fill','none'); shadow.setAttribute('stroke-linecap','round');
+  shadow.setAttribute('transform','translate(2,2)'); g.appendChild(shadow);
 
-  // Main body — thick
+  // Main body
   const body = makePath(d);
-  body.setAttribute('stroke', theme.body);
-  body.setAttribute('stroke-width', '12');
-  body.setAttribute('fill', 'none');
-  body.setAttribute('stroke-linecap', 'round');
-  g.appendChild(body);
+  body.setAttribute('stroke', theme.body); body.setAttribute('stroke-width', bodyW);
+  body.setAttribute('fill','none'); body.setAttribute('stroke-linecap','round'); g.appendChild(body);
 
   // Belly stripe
   const belly = makePath(d);
-  belly.setAttribute('stroke', theme.belly);
-  belly.setAttribute('stroke-width', '5');
-  belly.setAttribute('fill', 'none');
-  belly.setAttribute('stroke-linecap', 'round');
-  belly.setAttribute('opacity', '0.7');
-  g.appendChild(belly);
+  belly.setAttribute('stroke', theme.belly); belly.setAttribute('stroke-width', bellyW);
+  belly.setAttribute('fill','none'); belly.setAttribute('stroke-linecap','round');
+  belly.setAttribute('opacity','0.6'); g.appendChild(belly);
 
-  // Diamond pattern along body
-  for (let t = 0.1; t < 0.92; t += 0.12) {
-    const pt = getPointOnCubic(x1, y1, cx1, cy1, cx2, cy2, x1+dx*0.5, y1+dy*0.5, t);
-    const spot = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    const s = 3.5;
-    spot.setAttribute('d', `M ${pt.x} ${pt.y-s} L ${pt.x+s} ${pt.y} L ${pt.x} ${pt.y+s} L ${pt.x-s} ${pt.y} Z`);
-    spot.setAttribute('fill', theme.spots);
-    spot.setAttribute('opacity', '0.35');
+  // Diamond pattern
+  for (let t = 0.08; t < 0.95; t += 0.1) {
+    const pt = getPointOnPath(x1,y1,c1x,c1y,c2x,c2y,mx,my,t);
+    const s = theme.isMega ? 4.5 : 3;
+    const spot = document.createElementNS('http://www.w3.org/2000/svg','path');
+    spot.setAttribute('d',`M ${pt.x} ${pt.y-s} L ${pt.x+s} ${pt.y} L ${pt.x} ${pt.y+s} L ${pt.x-s} ${pt.y} Z`);
+    spot.setAttribute('fill', theme.spots); spot.setAttribute('opacity','0.3');
     g.appendChild(spot);
   }
 
-  // Head — larger, more cartoon
-  const headSize = 10;
-  const headG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  // HEAD
+  const headG = document.createElementNS('http://www.w3.org/2000/svg','g');
 
-  // Head circle with slight ellipse
-  const headShape = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
-  headShape.setAttribute('cx', x1); headShape.setAttribute('cy', y1);
-  headShape.setAttribute('rx', headSize); headShape.setAttribute('ry', headSize * 0.85);
-  headShape.setAttribute('fill', theme.head);
-  headG.appendChild(headShape);
+  // Head shape
+  const headEl = document.createElementNS('http://www.w3.org/2000/svg','ellipse');
+  headEl.setAttribute('cx',x1); headEl.setAttribute('cy',y1);
+  headEl.setAttribute('rx', headR); headEl.setAttribute('ry', headR*0.85);
+  headEl.setAttribute('fill', theme.head); headG.appendChild(headEl);
 
-  // Highlight on head
-  const headHighlight = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
-  headHighlight.setAttribute('cx', x1 - 2); headHighlight.setAttribute('cy', y1 - 2);
-  headHighlight.setAttribute('rx', 4); headHighlight.setAttribute('ry', 3);
-  headHighlight.setAttribute('fill', 'rgba(255,255,255,0.25)');
-  headG.appendChild(headHighlight);
+  // Head highlight
+  const hl = document.createElementNS('http://www.w3.org/2000/svg','ellipse');
+  hl.setAttribute('cx',x1-2); hl.setAttribute('cy',y1-2);
+  hl.setAttribute('rx',headR*0.4); hl.setAttribute('ry',headR*0.3);
+  hl.setAttribute('fill','rgba(255,255,255,0.25)'); headG.appendChild(hl);
 
-  // Eyes — big, expressive, cartoon-style
-  for (const ox of [-4.5, 4.5]) {
-    // Eye white
-    const eyeW = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    eyeW.setAttribute('cx', x1 + ox); eyeW.setAttribute('cy', y1 - 3);
-    eyeW.setAttribute('r', '3.5');
-    eyeW.setAttribute('fill', '#fff');
-    eyeW.setAttribute('stroke', 'rgba(0,0,0,0.15)');
-    eyeW.setAttribute('stroke-width', '0.5');
-    headG.appendChild(eyeW);
-    // Pupil
-    const pupil = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    pupil.setAttribute('cx', x1 + ox + 0.8); pupil.setAttribute('cy', y1 - 2.5);
-    pupil.setAttribute('r', '2');
-    pupil.setAttribute('fill', '#1F2937');
+  // Eyes — big cartoon style
+  const eyeSpread = headR * 0.5;
+  for (const ox of [-eyeSpread, eyeSpread]) {
+    const ew = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    ew.setAttribute('cx',x1+ox); ew.setAttribute('cy',y1-headR*0.25);
+    ew.setAttribute('r', headR*0.35); ew.setAttribute('fill','#fff');
+    ew.setAttribute('stroke','rgba(0,0,0,0.1)'); ew.setAttribute('stroke-width','0.5');
+    headG.appendChild(ew);
+
+    const pupil = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    pupil.setAttribute('cx',x1+ox+1); pupil.setAttribute('cy',y1-headR*0.2);
+    pupil.setAttribute('r', headR*0.2); pupil.setAttribute('fill','#1F2937');
     headG.appendChild(pupil);
-    // Eye shine
-    const shine = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    shine.setAttribute('cx', x1 + ox - 0.5); shine.setAttribute('cy', y1 - 4);
-    shine.setAttribute('r', '1');
-    shine.setAttribute('fill', '#fff');
+
+    const shine = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    shine.setAttribute('cx',x1+ox-0.5); shine.setAttribute('cy',y1-headR*0.35);
+    shine.setAttribute('r', headR*0.12); shine.setAttribute('fill','#fff');
     headG.appendChild(shine);
   }
 
-  // Smile
-  const smile = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  smile.setAttribute('d', `M ${x1-3} ${y1+2} Q ${x1} ${y1+5.5} ${x1+3} ${y1+2}`);
-  smile.setAttribute('stroke', theme.spots);
-  smile.setAttribute('stroke-width', '1');
-  smile.setAttribute('fill', 'none');
-  smile.setAttribute('stroke-linecap', 'round');
-  headG.appendChild(smile);
+  // Villain snake gets angry eyebrows
+  if (theme.isMega) {
+    for (const side of [-1, 1]) {
+      const brow = document.createElementNS('http://www.w3.org/2000/svg','line');
+      const bx = x1 + eyeSpread * side;
+      const by = y1 - headR * 0.55;
+      brow.setAttribute('x1', bx - 3*side); brow.setAttribute('y1', by + 2);
+      brow.setAttribute('x2', bx + 3*side); brow.setAttribute('y2', by - 1);
+      brow.setAttribute('stroke', theme.spots); brow.setAttribute('stroke-width', '2');
+      brow.setAttribute('stroke-linecap','round');
+      headG.appendChild(brow);
+    }
+  }
+
+  // Mouth — villain gets angry frown, others smile
+  const mouth = document.createElementNS('http://www.w3.org/2000/svg','path');
+  if (theme.isMega) {
+    mouth.setAttribute('d',`M ${x1-4} ${y1+headR*0.25} Q ${x1} ${y1+headR*0.05} ${x1+4} ${y1+headR*0.25}`);
+  } else {
+    mouth.setAttribute('d',`M ${x1-3} ${y1+headR*0.15} Q ${x1} ${y1+headR*0.45} ${x1+3} ${y1+headR*0.15}`);
+  }
+  mouth.setAttribute('stroke', theme.spots); mouth.setAttribute('stroke-width','1.2');
+  mouth.setAttribute('fill','none'); mouth.setAttribute('stroke-linecap','round');
+  headG.appendChild(mouth);
 
   // Forked tongue
-  const tongue = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  const ty = y1 + headSize * 0.85;
-  const t1 = makePath(`M ${x1} ${ty} Q ${x1-1} ${ty+5} ${x1-3.5} ${ty+7}`);
-  t1.setAttribute('stroke', theme.tongue); t1.setAttribute('stroke-width', '1.5');
-  t1.setAttribute('fill', 'none'); t1.setAttribute('stroke-linecap', 'round');
-  const t2 = makePath(`M ${x1} ${ty} Q ${x1+1} ${ty+5} ${x1+3.5} ${ty+7}`);
-  t2.setAttribute('stroke', theme.tongue); t2.setAttribute('stroke-width', '1.5');
-  t2.setAttribute('fill', 'none'); t2.setAttribute('stroke-linecap', 'round');
-  tongue.appendChild(t1); tongue.appendChild(t2);
-  headG.appendChild(tongue);
+  const ty = y1 + headR * 0.85;
+  const t1 = makePath(`M ${x1} ${ty} Q ${x1-1.5} ${ty+6} ${x1-4} ${ty+8}`);
+  t1.setAttribute('stroke',theme.tongue); t1.setAttribute('stroke-width','1.5');
+  t1.setAttribute('fill','none'); t1.setAttribute('stroke-linecap','round');
+  const t2 = makePath(`M ${x1} ${ty} Q ${x1+1.5} ${ty+6} ${x1+4} ${ty+8}`);
+  t2.setAttribute('stroke',theme.tongue); t2.setAttribute('stroke-width','1.5');
+  t2.setAttribute('fill','none'); t2.setAttribute('stroke-linecap','round');
+  headG.appendChild(t1); headG.appendChild(t2);
 
   g.appendChild(headG);
 
-  // Tail taper
-  const tailTip = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-  tailTip.setAttribute('cx', x2); tailTip.setAttribute('cy', y2);
-  tailTip.setAttribute('r', '3');
-  tailTip.setAttribute('fill', theme.belly);
-  g.appendChild(tailTip);
+  // Tail
+  const tailEl = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  tailEl.setAttribute('cx',x2); tailEl.setAttribute('cy',y2);
+  tailEl.setAttribute('r', theme.isMega ? 4 : 3);
+  tailEl.setAttribute('fill', theme.belly); g.appendChild(tailEl);
+
+  // Villain emoji label
+  if (theme.isMega) {
+    const label = document.createElementNS('http://www.w3.org/2000/svg','text');
+    label.setAttribute('x',x1); label.setAttribute('y',y1-headR-4);
+    label.setAttribute('font-size','12'); label.setAttribute('text-anchor','middle');
+    label.textContent = '😈';
+    g.appendChild(label);
+  }
 
   svg.appendChild(g);
 }
 
-function getPointOnCubic(x0, y0, cx1, cy1, cx2, cy2, x3, y3, t) {
-  const u = 1 - t;
-  return {
-    x: u*u*u*x0 + 3*u*u*t*cx1 + 3*u*t*t*cx2 + t*t*t*x3,
-    y: u*u*u*y0 + 3*u*u*t*cy1 + 3*u*t*t*cy2 + t*t*t*y3
-  };
+function getPointOnPath(x0,y0,cx1,cy1,cx2,cy2,x3,y3,t) {
+  const u=1-t;
+  return { x: u*u*u*x0+3*u*u*t*cx1+3*u*t*t*cx2+t*t*t*x3, y: u*u*u*y0+3*u*u*t*cy1+3*u*t*t*cy2+t*t*t*y3 };
 }
+function makePath(d) { const p=document.createElementNS('http://www.w3.org/2000/svg','path'); p.setAttribute('d',d); return p; }
+function makeLine(x1,y1,x2,y2) { const l=document.createElementNS('http://www.w3.org/2000/svg','line'); l.setAttribute('x1',x1); l.setAttribute('y1',y1); l.setAttribute('x2',x2); l.setAttribute('y2',y2); return l; }
 
-function makePath(d) {
-  const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  p.setAttribute('d', d);
-  return p;
-}
-
-function makeLine(x1, y1, x2, y2) {
-  const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-  line.setAttribute('x1', x1); line.setAttribute('y1', y1);
-  line.setAttribute('x2', x2); line.setAttribute('y2', y2);
-  return line;
-}
-
-// ═══════════════════════════════════════
-// TOKENS
-// ═══════════════════════════════════════
+// ─── TOKENS ───
 function createTokens() {
-  const container = document.getElementById('board-container');
-  container.querySelectorAll('.token').forEach(t => t.remove());
-  for (let i = 0; i < numPlayers; i++) {
-    const token = document.createElement('div');
-    token.className = 'token';
-    token.id = `token-${i}`;
-    token.innerHTML = createPinSVG(PLAYER_COLORS[i], i);
-    container.appendChild(token);
-    positionToken(i, false);
+  const c=document.getElementById('board-container');
+  c.querySelectorAll('.token').forEach(t=>t.remove());
+  for (let i=0; i<numPlayers; i++) {
+    const token=document.createElement('div');
+    token.className='token'; token.id=`token-${i}`;
+    token.innerHTML=createPinSVG(PLAYER_COLORS[i],i);
+    c.appendChild(token); positionToken(i,false);
   }
 }
 
-function createPinSVG(color, idx) {
-  const light = lighten(color, 40);
-  const dark = darken(color, 20);
+function createPinSVG(color,idx) {
+  const light=lighten(color,40), dark=darken(color,20);
+  const initials = playerNames[idx] ? playerNames[idx].charAt(0).toUpperCase() : (idx+1);
   return `<svg viewBox="0 0 40 52" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <radialGradient id="pg${idx}" cx="35%" cy="30%">
-        <stop offset="0%" stop-color="${light}"/>
-        <stop offset="100%" stop-color="${color}"/>
-      </radialGradient>
-      <filter id="ds${idx}"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.35"/></filter>
-    </defs>
+    <defs><radialGradient id="pg${idx}" cx="35%" cy="30%"><stop offset="0%" stop-color="${light}"/><stop offset="100%" stop-color="${color}"/></radialGradient>
+    <filter id="ds${idx}"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.35"/></filter></defs>
     <g filter="url(#ds${idx})">
-      <path d="M20 50 C20 50 2 30 2 17 A18 18 0 1 1 38 17 C38 30 20 50 20 50Z"
-        fill="url(#pg${idx})" stroke="${dark}" stroke-width="1.5"/>
-      <circle cx="20" cy="16" r="8" fill="white" opacity="0.92"/>
-      <text x="20" y="20" text-anchor="middle" font-size="12" font-weight="bold" fill="${dark}">${idx + 1}</text>
-    </g>
-  </svg>`;
+      <path d="M20 50 C20 50 2 30 2 17 A18 18 0 1 1 38 17 C38 30 20 50 20 50Z" fill="url(#pg${idx})" stroke="${dark}" stroke-width="1.5"/>
+      <circle cx="20" cy="16" r="8.5" fill="white" opacity="0.92"/>
+      <text x="20" y="20.5" text-anchor="middle" font-size="13" font-weight="bold" fill="${dark}" font-family="system-ui">${initials}</text>
+    </g></svg>`;
 }
 
-function lighten(hex, pct) {
-  const [r,g,b] = hexToRgb(hex);
-  return '#' + [r,g,b].map(c => Math.min(255, c + Math.round((255-c)*pct/100)).toString(16).padStart(2,'0')).join('');
-}
-function darken(hex, pct) {
-  const [r,g,b] = hexToRgb(hex);
-  return '#' + [r,g,b].map(c => Math.max(0, c - Math.round(c*pct/100)).toString(16).padStart(2,'0')).join('');
-}
-function hexToRgb(hex) {
-  return [parseInt(hex.slice(1,3),16), parseInt(hex.slice(3,5),16), parseInt(hex.slice(5,7),16)];
-}
+function lighten(hex,pct) { const [r,g,b]=hexToRgb(hex); return '#'+[r,g,b].map(c=>Math.min(255,c+Math.round((255-c)*pct/100)).toString(16).padStart(2,'0')).join(''); }
+function darken(hex,pct) { const [r,g,b]=hexToRgb(hex); return '#'+[r,g,b].map(c=>Math.max(0,c-Math.round(c*pct/100)).toString(16).padStart(2,'0')).join(''); }
+function hexToRgb(hex) { return [parseInt(hex.slice(1,3),16),parseInt(hex.slice(3,5),16),parseInt(hex.slice(5,7),16)]; }
 
-function positionToken(playerIdx, animate = true) {
-  const token = document.getElementById(`token-${playerIdx}`);
+function positionToken(idx, animate=true) {
+  const token=document.getElementById(`token-${idx}`);
   if (!token) return;
-  const pos = positions[playerIdx];
-  const sq = getSquarePos(pos);
-  const sameSquare = positions.reduce((acc, p, i) => { if (p === pos && i < playerIdx) acc++; return acc; }, 0);
-  const offsets = [[0,0],[0.025,0],[-0.025,0],[0,0.025]];
-  const off = offsets[sameSquare] || [0,0];
-  if (!animate) token.style.transition = 'none';
-  token.style.left = `${(sq.x + off[0]) * 100 - 4}%`;
-  token.style.top = `${(sq.y + off[1]) * 100 - 6.5}%`;
-  if (!animate) requestAnimationFrame(() => { token.style.transition = ''; });
+  const pos=positions[idx], sq=getSquarePos(pos);
+  const same=positions.reduce((a,p,i)=>{if(p===pos&&i<idx)a++;return a;},0);
+  const off=[[0,0],[0.025,0],[-0.025,0],[0,0.025]][same]||[0,0];
+  if (!animate) token.style.transition='none';
+  token.style.left=`${(sq.x+off[0])*100-4.25}%`;
+  token.style.top=`${(sq.y+off[1])*100-7}%`;
+  if (!animate) requestAnimationFrame(()=>{token.style.transition='';});
 }
 
-// ═══════════════════════════════════════
-// CONTROLS
-// ═══════════════════════════════════════
+// ─── CONTROLS ───
 function buildControls() {
-  const controls = document.getElementById('controls');
-  controls.innerHTML = '';
-  for (let i = 0; i < numPlayers; i++) {
-    const ind = document.createElement('div');
-    ind.className = 'player-indicator';
-    ind.innerHTML = `
-      <div class="pip ${i===0?'active':''}" id="pip-${i}" style="background:${PLAYER_COLORS[i]}">
-        <span class="pos-label" id="pos-${i}">Start</span>
-      </div>
-      <span class="name">${playerNames[i]}</span>`;
+  const controls=document.getElementById('controls');
+  controls.innerHTML='';
+  for (let i=0; i<numPlayers; i++) {
+    const ind=document.createElement('div');
+    ind.className='player-indicator';
+    ind.innerHTML=`<div class="pip ${i===0?'active':''}" id="pip-${i}" style="background:${PLAYER_COLORS[i]}"><span class="pos-label" id="pos-${i}">Start</span></div><span class="name">${playerNames[i]}</span>`;
     controls.appendChild(ind);
-    if (i === Math.floor((numPlayers-1)/2)) {
-      const area = document.createElement('div');
-      area.className = 'dice-area';
-      area.innerHTML = `
-        <button class="dice-btn" id="dice-btn" onclick="rollDice()">
-          <div class="dice-face" id="dice-face">${diceFaceHTML(1)}</div>
-        </button>
-        <span class="roll-hint" id="roll-hint">Tap to roll!</span>`;
+    if (i===Math.floor((numPlayers-1)/2)) {
+      const area=document.createElement('div');
+      area.className='dice-area';
+      area.innerHTML=`<button class="dice-btn" id="dice-btn" onclick="rollDice()"><div class="dice-face" id="dice-face">${diceFaceHTML(1)}</div></button><span class="roll-hint" id="roll-hint">Tap to roll!</span>`;
       controls.appendChild(area);
     }
   }
 }
 
-function diceFaceHTML(num) {
-  const p = {1:[0,0,0,0,1,0,0,0,0],2:[0,0,1,0,0,0,1,0,0],3:[0,0,1,0,1,0,1,0,0],4:[1,0,1,0,0,0,1,0,1],5:[1,0,1,0,1,0,1,0,1],6:[1,0,1,1,0,1,1,0,1]};
-  return (p[num]||p[1]).map(v=>`<div class="dot ${v?'show':''}"></div>`).join('');
+function diceFaceHTML(n) {
+  const p={1:[0,0,0,0,1,0,0,0,0],2:[0,0,1,0,0,0,1,0,0],3:[0,0,1,0,1,0,1,0,0],4:[1,0,1,0,0,0,1,0,1],5:[1,0,1,0,1,0,1,0,1],6:[1,0,1,1,0,1,1,0,1]};
+  return (p[n]||p[1]).map(v=>`<div class="dot ${v?'show':''}"></div>`).join('');
 }
 
 function updateTurnUI() {
-  document.getElementById('turn-dot').style.background = PLAYER_COLORS[currentPlayer];
-  document.getElementById('turn-label').textContent = `${playerNames[currentPlayer]}'s turn`;
-  for (let i = 0; i < numPlayers; i++) {
-    const pip = document.getElementById(`pip-${i}`);
-    if (pip) pip.classList.toggle('active', i === currentPlayer);
-    const posLabel = document.getElementById(`pos-${i}`);
-    if (posLabel) posLabel.textContent = positions[i] < 1 ? 'Start' : positions[i];
+  document.getElementById('turn-dot').style.background=PLAYER_COLORS[currentPlayer];
+  document.getElementById('turn-label').textContent=`${playerNames[currentPlayer]}'s turn`;
+  for (let i=0; i<numPlayers; i++) {
+    const pip=document.getElementById(`pip-${i}`);
+    if(pip) pip.classList.toggle('active',i===currentPlayer);
+    const pl=document.getElementById(`pos-${i}`);
+    if(pl) pl.textContent=positions[i]<1?'Start':positions[i];
+  }
+  // Active token glow
+  for (let i=0; i<numPlayers; i++) {
+    const t=document.getElementById(`token-${i}`);
+    if(t) t.classList.toggle('active-turn',i===currentPlayer);
   }
 }
 
-function showMessage(msg, cls = '') {
-  const el = document.getElementById('message');
-  el.textContent = msg;
-  el.className = 'message' + (cls ? ' ' + cls : '');
+function showMessage(msg,cls='') {
+  const el=document.getElementById('message');
+  el.textContent=msg; el.className='message'+(cls?' '+cls:'');
 }
 
-// ═══════════════════════════════════════
-// DICE ROLLING & GAME LOGIC
-// ═══════════════════════════════════════
+// ─── DICE & GAME LOGIC ───
 async function rollDice() {
-  if (rolling || gameOver) return;
-  rolling = true;
-
-  const btn = document.getElementById('dice-btn');
-  const face = document.getElementById('dice-face');
-  const hint = document.getElementById('roll-hint');
-  if (hint) hint.style.display = 'none';
-  btn.classList.add('rolling', 'disabled');
+  if (rolling||gameOver) return;
+  rolling=true;
+  const btn=document.getElementById('dice-btn'), face=document.getElementById('dice-face');
+  const hint=document.getElementById('roll-hint');
+  if(hint) hint.style.display='none';
+  btn.classList.add('rolling','disabled');
   btn.classList.remove('six-glow');
 
-  const result = Math.floor(Math.random() * 6) + 1;
-
-  // Dice animation — fast shuffling
-  for (let i = 0; i < 10; i++) {
-    face.innerHTML = diceFaceHTML(Math.floor(Math.random() * 6) + 1);
-    sfxDice();
-    await sleep(45);
-  }
-  face.innerHTML = diceFaceHTML(result);
+  const result=Math.floor(Math.random()*6)+1;
+  for (let i=0; i<10; i++) { face.innerHTML=diceFaceHTML(Math.floor(Math.random()*6)+1); sfxDice(); await sleep(45); }
+  face.innerHTML=diceFaceHTML(result);
   btn.classList.remove('rolling');
 
   showMessage(`${playerNames[currentPlayer]} rolled a ${result}!`);
 
-  if (result === 6) {
+  if (result===6) {
+    consecutiveSixes++;
     sfxSix();
     btn.classList.add('six-glow');
+    if (consecutiveSixes>=3) {
+      // TRIPLE SIX! Silly celebration
+      sfxTripleSix();
+      showMessage(`🎉🎉🎉 TRIPLE SIX! ${playerNames[currentPlayer]} is on FIRE! 🔥🔥🔥`,'triple-msg');
+      launchMiniConfetti();
+      await sleep(1200);
+    }
+  } else {
+    consecutiveSixes=0;
   }
 
   await sleep(400);
-
-  // Move
   await movePlayer(currentPlayer, result);
 
   if (!gameOver) {
-    if (result === 6) {
-      showMessage(`🎲 ${playerNames[currentPlayer]} rolled a 6 — roll again!`, 'six-msg');
-      // Don't advance player — same player rolls again
+    if (result===6) {
+      showMessage(`🎲 ${playerNames[currentPlayer]} rolled a 6 — roll again!`,'six-msg');
     } else {
-      currentPlayer = (currentPlayer + 1) % numPlayers;
+      currentPlayer=(currentPlayer+1)%numPlayers;
+      consecutiveSixes=0;
     }
     updateTurnUI();
     btn.classList.remove('disabled');
   }
-  rolling = false;
+  rolling=false;
 }
 
 async function movePlayer(player, steps) {
-  let pos = positions[player];
-  const target = pos + steps;
+  let pos=positions[player];
+  const target=pos+steps;
 
-  if (pos === 0) {
-    for (let i = 1; i <= steps; i++) {
-      positions[player] = i;
-      positionToken(player);
-      sfxStep();
-      await sleep(140);
-    }
-  } else if (target > 100) {
+  if (pos===0) {
+    for (let i=1; i<=steps; i++) { positions[player]=i; positionToken(player); sfxStep(); await sleep(130); }
+  } else if (target>100) {
     showMessage(`Need exact roll — ${playerNames[player]} stays on ${pos}!`);
-    await sleep(600);
-    return;
+    await sleep(600); return;
   } else {
-    for (let i = 1; i <= steps; i++) {
-      positions[player] = pos + i;
-      positionToken(player);
-      sfxStep();
-      await sleep(140);
-    }
+    for (let i=1; i<=steps; i++) { positions[player]=pos+i; positionToken(player); sfxStep(); await sleep(130); }
   }
 
-  // Bounce on landing
-  const token = document.getElementById(`token-${player}`);
+  const token=document.getElementById(`token-${player}`);
   token.classList.add('bounce');
-  setTimeout(() => token.classList.remove('bounce'), 400);
-
+  setTimeout(()=>token.classList.remove('bounce'),400);
   updateTurnUI();
 
-  // Win?
-  if (positions[player] === 100) {
-    await sleep(300);
-    showWin(player);
-    return;
-  }
+  if (positions[player]===100) { await sleep(300); showWin(player); return; }
 
   // Snake?
   if (SNAKES[positions[player]]) {
     await sleep(500);
-    const dest = SNAKES[positions[player]];
-    showMessage(`🐍 Oh no! Snake! Slide down to ${dest}!`, 'snake-msg');
-    sfxSnake();
+    const dest=SNAKES[positions[player]];
+    const isMega = positions[player]===98; // villain snake
+    if (isMega) {
+      sfxMegaSnake();
+      showMessage(`🐍😈 THE BIG SNAKE!! Down to ${dest}!`,'snake-msg');
+    } else {
+      sfxSnake();
+      showMessage(`🐍 Oh no! Snake! Slide down to ${dest}!`,'snake-msg');
+    }
     token.classList.add('sliding');
-    positions[player] = dest;
-    positionToken(player);
-    await sleep(750);
+    positions[player]=dest; positionToken(player);
+    await sleep(800);
     token.classList.remove('sliding');
     updateTurnUI();
     return;
@@ -969,77 +713,84 @@ async function movePlayer(player, steps) {
   // Ladder?
   if (LADDERS[positions[player]]) {
     await sleep(500);
-    const dest = LADDERS[positions[player]];
-    showMessage(`🪜 Yay! Ladder! Climb up to ${dest}!`, 'ladder-msg');
-    sfxLadder();
+    const dest=LADDERS[positions[player]];
+    const isMega = positions[player]===4 || positions[player]===80;
+    if (isMega && dest===100) {
+      sfxMegaLadder();
+      showMessage(`🪜🌟 THE MAGIC LADDER!! ALL THE WAY TO 100!!`,'ladder-msg');
+    } else if (isMega) {
+      sfxMegaLadder();
+      showMessage(`🪜✨ MEGA LADDER! Zoom up to ${dest}!`,'ladder-msg');
+    } else {
+      sfxLadder();
+      showMessage(`🪜 Yay! Ladder! Climb up to ${dest}!`,'ladder-msg');
+    }
     token.classList.add('sliding');
-    positions[player] = dest;
-    positionToken(player);
-    await sleep(750);
+    positions[player]=dest; positionToken(player);
+    await sleep(800);
     token.classList.remove('sliding');
     updateTurnUI();
-    if (positions[player] === 100) {
-      await sleep(300);
-      showWin(player);
-    }
+    if (positions[player]===100) { await sleep(300); showWin(player); }
   }
 }
 
-// ═══════════════════════════════════════
-// WIN
-// ═══════════════════════════════════════
+// ─── WIN ───
 function showWin(player) {
-  gameOver = true;
-  sfxWin();
-  document.getElementById('win-text').textContent = `${playerNames[player]} wins! 🎉`;
-  document.getElementById('win-text').style.color = PLAYER_COLORS[player];
+  gameOver=true; sfxWin();
+  document.getElementById('win-text').textContent=`${playerNames[player]} wins! 🎉`;
+  document.getElementById('win-text').style.color=PLAYER_COLORS[player];
   document.getElementById('win-overlay').classList.add('active');
   launchConfetti();
 }
 
 function launchConfetti() {
-  const colors = ['#FF6B6B','#4ECDC4','#FFE66D','#A78BFA','#F472B6','#34D399','#60A5FA','#FB923C','#F87171','#818CF8','#FBBF24','#6EE7B7'];
-  for (let i = 0; i < 120; i++) {
-    setTimeout(() => {
-      const piece = document.createElement('div');
-      piece.className = 'confetti-piece';
-      piece.style.left = Math.random() * 100 + 'vw';
-      piece.style.top = '-20px';
-      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-      piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-      const size = 7 + Math.random() * 12;
-      piece.style.width = size + 'px';
-      piece.style.height = (Math.random() > 0.5 ? size : size * 0.5) + 'px';
-      piece.style.animationDuration = (2.2 + Math.random() * 2.8) + 's';
-      document.body.appendChild(piece);
-      setTimeout(() => piece.remove(), 5500);
-    }, i * 22);
+  const colors=['#FF6B6B','#4ECDC4','#FFE66D','#A78BFA','#F472B6','#34D399','#60A5FA','#FB923C','#F87171','#818CF8','#FBBF24','#6EE7B7'];
+  for (let i=0; i<130; i++) {
+    setTimeout(()=>{
+      const p=document.createElement('div');
+      p.className='confetti-piece';
+      p.style.left=Math.random()*100+'vw'; p.style.top='-20px';
+      p.style.background=colors[Math.floor(Math.random()*colors.length)];
+      p.style.borderRadius=Math.random()>0.5?'50%':'2px';
+      const s=7+Math.random()*12;
+      p.style.width=s+'px'; p.style.height=(Math.random()>0.5?s:s*0.5)+'px';
+      p.style.animationDuration=(2.2+Math.random()*2.8)+'s';
+      document.body.appendChild(p);
+      setTimeout(()=>p.remove(),5500);
+    },i*20);
   }
 }
 
-// ═══════════════════════════════════════
-// GAME FLOW
-// ═══════════════════════════════════════
-function startGame() {
-  for (let i = 0; i < 4; i++) {
-    const input = document.getElementById(`name-${i}`);
-    if (input && input.value.trim()) playerNames[i] = input.value.trim();
-    else playerNames[i] = DEFAULT_NAMES[i];
+function launchMiniConfetti() {
+  const colors=['#FDE68A','#FB923C','#F87171','#FBBF24','#EF4444'];
+  for (let i=0; i<40; i++) {
+    setTimeout(()=>{
+      const p=document.createElement('div');
+      p.className='confetti-piece';
+      p.style.left=(30+Math.random()*40)+'vw'; p.style.top='40vh';
+      p.style.background=colors[Math.floor(Math.random()*colors.length)];
+      p.style.borderRadius='50%';
+      const s=5+Math.random()*8;
+      p.style.width=s+'px'; p.style.height=s+'px';
+      p.style.animationDuration=(1.5+Math.random()*1.5)+'s';
+      document.body.appendChild(p);
+      setTimeout(()=>p.remove(),3500);
+    },i*30);
   }
-  positions = Array(numPlayers).fill(0);
-  currentPlayer = 0;
-  gameOver = false;
-  rolling = false;
+}
 
+// ─── GAME FLOW ───
+function startGame() {
+  for (let i=0; i<4; i++) {
+    const inp=document.getElementById(`name-${i}`);
+    playerNames[i] = inp&&inp.value.trim() ? inp.value.trim() : DEFAULT_NAMES[i];
+  }
+  positions=Array(numPlayers).fill(0);
+  currentPlayer=0; gameOver=false; rolling=false; consecutiveSixes=0;
   document.getElementById('menu-screen').classList.remove('active');
   document.getElementById('game-screen').classList.add('active');
   document.getElementById('win-overlay').classList.remove('active');
-
-  buildBoard();
-  drawSnakesAndLadders();
-  createTokens();
-  buildControls();
-  updateTurnUI();
+  buildBoard(); drawSnakesAndLadders(); createTokens(); buildControls(); updateTurnUI();
   showMessage(`${playerNames[0]} goes first — tap the dice! 🎲`);
 }
 
@@ -1049,7 +800,7 @@ function goToMenu() {
   document.getElementById('menu-screen').classList.add('active');
 }
 
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+function sleep(ms) { return new Promise(r=>setTimeout(r,ms)); }
 </script>
 </body>
 </html>
