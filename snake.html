@@ -108,6 +108,10 @@ body{
   position:relative;
   width:min(90vw,420px);height:min(90vw,420px);
 }
+/* Shrink board when d-pad is showing to fit both on screen */
+.has-dpad .board-wrap{
+  width:min(72vw,360px);height:min(72vw,360px);
+}
 canvas{
   width:100%;height:100%;border-radius:16px;
   box-shadow:0 8px 40px rgba(0,0,0,.35);
@@ -167,22 +171,34 @@ canvas{
 .pause-btn.resume{background:linear-gradient(135deg,#22C55E,#16A34A);box-shadow:0 4px 16px rgba(34,197,94,.4)}
 .pause-btn.quit{background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.3)}
 
-/* D-PAD */
-.dpad{
-  display:none;position:fixed;bottom:24px;right:24px;
-  width:120px;height:120px;z-index:30;opacity:.4;
+/* D-PAD — big, kid-friendly, always visible on touch */
+.dpad-container{
+  display:none;width:100%;max-width:280px;margin-top:8px;
+  position:relative;height:160px;
 }
-.dpad.visible{display:block}
-.dpad button{
-  position:absolute;width:40px;height:40px;border:none;border-radius:10px;
-  background:rgba(255,255,255,.3);font-size:1.2rem;cursor:pointer;
-  backdrop-filter:blur(4px);color:#fff;font-weight:900;
+.dpad-container.visible{display:block}
+.dpad-container button{
+  position:absolute;border:none;border-radius:18px;
+  background:rgba(255,255,255,.25);backdrop-filter:blur(4px);
+  font-size:2rem;cursor:pointer;color:#fff;font-weight:900;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .08s,transform .08s;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
+  border:2px solid rgba(255,255,255,.2);
 }
-.dpad button:active{background:rgba(255,255,255,.5)}
-.dpad .d-up{top:0;left:40px}
-.dpad .d-down{bottom:0;left:40px}
-.dpad .d-left{top:40px;left:0}
-.dpad .d-right{top:40px;right:0}
+.dpad-container button:active{background:rgba(255,255,255,.5);transform:scale(.92)}
+.dpad-container .d-up{width:80px;height:56px;top:0;left:50%;transform:translateX(-50%)}
+.dpad-container .d-down{width:80px;height:56px;bottom:0;left:50%;transform:translateX(-50%)}
+.dpad-container .d-left{width:56px;height:80px;top:50%;left:20px;transform:translateY(-50%)}
+.dpad-container .d-right{width:56px;height:80px;top:50%;right:20px;transform:translateY(-50%)}
+.dpad-container .d-up:active{transform:translateX(-50%) scale(.92)}
+.dpad-container .d-down:active{transform:translateX(-50%) scale(.92)}
+.dpad-container .d-left:active{transform:translateY(-50%) scale(.92)}
+.dpad-container .d-right:active{transform:translateY(-50%) scale(.92)}
+/* Highlight the direction you CAN turn (not current dir or opposite) */
+.dpad-container button.suggested{background:rgba(255,255,255,.35);border-color:rgba(255,255,255,.45)}
 
 /* CONFETTI */
 .confetti-piece{
@@ -265,15 +281,17 @@ canvas{
       </div>
     </div>
   </div>
+
+  <!-- D-PAD — big kid-friendly buttons -->
+  <div class="dpad-container" id="dpad">
+    <button class="d-up" ontouchstart="dpadPress(0,-1,event)" onmousedown="dpadPress(0,-1,event)">▲</button>
+    <button class="d-down" ontouchstart="dpadPress(0,1,event)" onmousedown="dpadPress(0,1,event)">▼</button>
+    <button class="d-left" ontouchstart="dpadPress(-1,0,event)" onmousedown="dpadPress(-1,0,event)">◀</button>
+    <button class="d-right" ontouchstart="dpadPress(1,0,event)" onmousedown="dpadPress(1,0,event)">▶</button>
+  </div>
 </div>
 
-<!-- D-PAD -->
-<div class="dpad" id="dpad">
-  <button class="d-up" ontouchstart="queueDir(0,-1);event.preventDefault()">▲</button>
-  <button class="d-down" ontouchstart="queueDir(0,1);event.preventDefault()">▼</button>
-  <button class="d-left" ontouchstart="queueDir(-1,0);event.preventDefault()">◀</button>
-  <button class="d-right" ontouchstart="queueDir(1,0);event.preventDefault()">▶</button>
-</div>
+
 
 <script>
 // ═══════════════════════════════════════════
@@ -282,10 +300,10 @@ canvas{
 const GRID = 20;
 const CELL = 20; // canvas pixels per cell
 const CANVAS_SIZE = GRID * CELL; // 400
-const START_TICK = 150;
+const START_TICK = 300; // kid-friendly: ~3.3 moves/sec (was 150)
 const MIN_TICK = 70;
-const SPEED_STEP = 8;
-const FOOD_PER_SPEED = 5;
+const SPEED_STEP = 10; // gentler ramp
+const FOOD_PER_SPEED = 7; // more food before speed-up
 const COMBO_WINDOW = 3000; // ms
 const SPECIAL_INTERVAL = 30000; // ms
 const SPECIAL_LIFETIME = 8000; // ms
@@ -431,7 +449,7 @@ function startGame(mode) {
     foodEaten: 0,
     combo: 0,
     lastEatTime: 0,
-    tickMs: mode === 'speed' ? 120 : START_TICK,
+    tickMs: mode === 'speed' ? 200 : START_TICK,
     speedLevel: 1,
     hiScore: hi,
     alive: true,
@@ -464,8 +482,7 @@ function startGame(mode) {
   document.getElementById('comboDisplay').classList.remove('visible');
   document.getElementById('timerDisplay').classList.remove('visible', 'urgent');
   if (mode === 'speed') document.getElementById('timerDisplay').classList.add('visible');
-  if (settings.dpad) document.getElementById('dpad').classList.add('visible');
-  else document.getElementById('dpad').classList.remove('visible');
+  applyDpadVisibility();
   updateSpeedPips();
   updateBg();
   state.lastTick = performance.now();
@@ -996,6 +1013,11 @@ function gameLoop(now) {
 // ═══════════════════════════════════════════
 // INPUT
 // ═══════════════════════════════════════════
+function dpadPress(dx, dy, event) {
+  if (event) event.preventDefault();
+  queueDir(dx, dy);
+}
+
 function queueDir(dx, dy) {
   if (!state || !state.alive || state.paused) return;
   const last = state.inputQueue.length > 0 ? state.inputQueue[state.inputQueue.length - 1] : state.dir;
@@ -1057,7 +1079,7 @@ document.addEventListener('touchend', e => {
   const dist = Math.sqrt(dx * dx + dy * dy);
   const elapsed = performance.now() - touchStartTime;
 
-  if (dist < 20 || elapsed > 200) return; // not a swipe
+  if (dist < 12 || elapsed > 400) return; // low threshold for small hands
 
   if (Math.abs(dx) > Math.abs(dy)) {
     queueDir(dx > 0 ? 1 : -1, 0);
@@ -1090,6 +1112,7 @@ function quitToMenu() {
   showScreen('menu');
   renderHiScores();
   document.getElementById('dpad').classList.remove('visible');
+  document.getElementById('game').classList.remove('has-dpad');
 }
 
 // ═══════════════════════════════════════════
@@ -1106,8 +1129,13 @@ function toggleSound() {
 function toggleDpad() {
   settings.dpad = !settings.dpad;
   document.getElementById('dpadToggle').classList.toggle('active', settings.dpad);
-  document.getElementById('dpad').classList.toggle('visible', settings.dpad && state?.alive);
+  applyDpadVisibility();
   localStorage.setItem('snake_settings', JSON.stringify(settings));
+}
+function applyDpadVisibility() {
+  const show = settings.dpad;
+  document.getElementById('dpad').classList.toggle('visible', show);
+  document.getElementById('game').classList.toggle('has-dpad', show);
 }
 function toggleGrid() {
   settings.grid = !settings.grid;
@@ -1115,9 +1143,15 @@ function toggleGrid() {
   localStorage.setItem('snake_settings', JSON.stringify(settings));
 }
 function loadSettings() {
+  // Auto-detect touch device — default d-pad ON for touch
+  const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  if (isTouch) settings.dpad = true;
+
   try {
     const s = JSON.parse(localStorage.getItem('snake_settings'));
     if (s) Object.assign(settings, s);
+    // But if no saved pref and touch device, force d-pad on
+    if (!s && isTouch) settings.dpad = true;
   } catch {}
   document.getElementById('soundToggle').classList.toggle('active', settings.sound);
   document.getElementById('soundToggle').textContent = settings.sound ? '🔊' : '🔇';
