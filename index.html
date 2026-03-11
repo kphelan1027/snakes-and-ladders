@@ -35,15 +35,12 @@
   .name-row .color-dot:hover { transform: scale(1.15); box-shadow: 0 0 12px rgba(255,255,255,0.5); }
   .name-row input { flex: 1; padding: 12px 16px; border: none; border-radius: 14px; font-size: 1.05rem; font-family: inherit; color: #374151; background: rgba(255,255,255,0.95); outline: none; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
   .name-row input:focus { box-shadow: 0 0 0 3px rgba(255,255,255,0.5); }
-
-  /* Color Picker Popover */
   .color-picker-popover { display: none; position: absolute; top: 36px; left: -4px; z-index: 50; background: rgba(30,30,50,0.95); border-radius: 14px; padding: 8px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); backdrop-filter: blur(8px); gap: 6px; flex-wrap: wrap; width: 140px; }
   .color-picker-popover.open { display: flex; }
   .color-picker-popover .color-option { width: 28px; height: 28px; border-radius: 50%; border: 3px solid transparent; cursor: pointer; transition: all 0.15s; }
   .color-picker-popover .color-option:hover { transform: scale(1.2); border-color: rgba(255,255,255,0.6); }
   .color-picker-popover .color-option.selected { border-color: #fff; box-shadow: 0 0 10px rgba(255,255,255,0.5); }
   .color-picker-popover .color-option.taken { opacity: 0.25; pointer-events: none; }
-
   .player-count-row { display: flex; gap: 10px; margin-bottom: 8px; }
   .player-count-btn { width: 60px; height: 60px; border-radius: 16px; border: 3px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.15); font-size: 1.6rem; font-weight: 800; color: #fff; cursor: pointer; transition: all 0.15s; backdrop-filter: blur(4px); }
   .player-count-btn.selected { border-color: #fff; background: rgba(255,255,255,0.35); transform: scale(1.08); }
@@ -68,7 +65,6 @@
   .cell.square-100 { background: linear-gradient(135deg, #FFD700, #FFA000) !important; }
   .cell.square-100::after { content: '⭐'; position: absolute; right: 1px; bottom: 0; font-size: clamp(10px, 3vw, 18px); animation: starSpin 3s linear infinite; }
   @keyframes starSpin { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(1.2); } 100% { transform: rotate(360deg) scale(1); } }
-
   .board-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
 
   /* TOKENS */
@@ -85,7 +81,6 @@
   .player-indicator .pip.active { opacity: 1; transform: scale(1.25); box-shadow: 0 0 20px rgba(255,255,255,0.5); }
   .player-indicator .pip .pos-label { position: absolute; bottom: -16px; left: 50%; transform: translateX(-50%); font-size: 0.65rem; font-weight: 800; color: rgba(255,255,255,0.8); white-space: nowrap; }
   .player-indicator .name { font-size: 0.75rem; font-weight: 800; color: #fff; margin-top: 4px; text-shadow: 0 1px 3px rgba(0,0,0,0.3); }
-
   .dice-area { display: flex; flex-direction: column; align-items: center; gap: 6px; }
   .dice-btn { width: 84px; height: 84px; border-radius: 50%; border: none; background: linear-gradient(135deg, #f97316, #ef4444); cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(239,68,68,0.45), inset 0 2px 0 rgba(255,255,255,0.2); transition: all 0.1s; }
   .dice-btn:active { transform: scale(0.9); }
@@ -126,13 +121,8 @@
   .confetti-piece { position: fixed; z-index: 200; animation: confettiFall linear forwards; pointer-events: none; }
   @keyframes confettiFall { 0% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); } 100% { opacity: 0; transform: translateY(100vh) rotate(720deg) scale(0.4); } }
 
-  /* SNAKE WIGGLE */
-  @keyframes snakeWiggle { 0%,100% { transform: translate(0,0); } 33% { transform: translate(1.5px, 0.5px); } 66% { transform: translate(-1.5px, -0.5px); } }
-
-  /* MEGA GLOW */
+  @keyframes snakeWiggle { 0%,100% { transform: translate(0,0); } 33% { transform: translate(1px, 0.5px); } 66% { transform: translate(-1px, -0.5px); } }
   @keyframes megaGlow { 0%,100% { filter: drop-shadow(0 0 4px rgba(255,215,0,0.4)); } 50% { filter: drop-shadow(0 0 12px rgba(255,215,0,0.8)); } }
-
-  /* TUNA GLOW */
   @keyframes tunaGlow { 0%,100% { filter: drop-shadow(0 0 4px rgba(56,189,248,0.4)); } 50% { filter: drop-shadow(0 0 14px rgba(56,189,248,0.8)); } }
 
   @media (max-width: 380px) { .dice-btn { width: 68px; height: 68px; } .dice-face { width: 46px; height: 46px; padding: 5px; } .dice-face .dot.show::after { width: 8px; height: 8px; } .player-indicator .pip { width: 28px; height: 28px; } }
@@ -187,380 +177,385 @@
 <script>
 // ─── COLOR PALETTE ───
 const COLOR_PALETTE = [
-  { name: 'Blue', hex: '#3B82F6' },
-  { name: 'Red', hex: '#EF4444' },
-  { name: 'Purple', hex: '#A855F7' },
-  { name: 'Green', hex: '#22C55E' },
-  { name: 'Orange', hex: '#F97316' },
-  { name: 'Pink', hex: '#EC4899' },
-  { name: 'Teal', hex: '#14B8A6' },
-  { name: 'Yellow', hex: '#EAB308' },
+  { name: 'Blue', hex: '#3B82F6' }, { name: 'Red', hex: '#EF4444' },
+  { name: 'Purple', hex: '#A855F7' }, { name: 'Green', hex: '#22C55E' },
+  { name: 'Orange', hex: '#F97316' }, { name: 'Pink', hex: '#EC4899' },
+  { name: 'Teal', hex: '#14B8A6' }, { name: 'Yellow', hex: '#EAB308' },
 ];
-
 let playerColors = ['#3B82F6','#EF4444','#A855F7','#22C55E'];
 const DEFAULT_NAMES = ['Ellie','Daddy','Player 3','Player 4'];
 
-// ─── COLOR PICKER ───
-function toggleColorPicker(playerIdx) {
-  // Close all other pickers
-  document.querySelectorAll('.color-picker-popover').forEach((p,i) => {
-    if (i !== playerIdx) p.classList.remove('open');
-  });
-  const picker = document.getElementById(`picker-${playerIdx}`);
+function toggleColorPicker(idx) {
+  document.querySelectorAll('.color-picker-popover').forEach((p,i) => { if (i !== idx) p.classList.remove('open'); });
+  const picker = document.getElementById(`picker-${idx}`);
   if (picker.classList.contains('open')) { picker.classList.remove('open'); return; }
-  // Build options
   picker.innerHTML = '';
   COLOR_PALETTE.forEach(c => {
-    const taken = playerColors.some((pc,i) => pc === c.hex && i !== playerIdx && i < numPlayers);
-    const selected = playerColors[playerIdx] === c.hex;
+    const taken = playerColors.some((pc,i) => pc === c.hex && i !== idx && i < numPlayers);
+    const selected = playerColors[idx] === c.hex;
     const opt = document.createElement('div');
     opt.className = 'color-option' + (selected ? ' selected' : '') + (taken ? ' taken' : '');
-    opt.style.background = c.hex;
-    opt.title = c.name + (taken ? ' (taken)' : '');
-    opt.onclick = (e) => { e.stopPropagation(); if (taken) return; selectColor(playerIdx, c.hex); };
+    opt.style.background = c.hex; opt.title = c.name + (taken ? ' (taken)' : '');
+    opt.onclick = (e) => { e.stopPropagation(); if (!taken) { playerColors[idx]=c.hex; document.getElementById(`color-dot-${idx}`).style.background=c.hex; document.documentElement.style.setProperty(`--p${idx+1}-color`,c.hex); picker.classList.remove('open'); } };
     picker.appendChild(opt);
   });
   picker.classList.add('open');
 }
+document.addEventListener('click', (e) => { if (!e.target.closest('.color-dot')) document.querySelectorAll('.color-picker-popover').forEach(p => p.classList.remove('open')); });
 
-function selectColor(playerIdx, hex) {
-  playerColors[playerIdx] = hex;
-  document.getElementById(`color-dot-${playerIdx}`).style.background = hex;
-  document.documentElement.style.setProperty(`--p${playerIdx+1}-color`, hex);
-  document.getElementById(`picker-${playerIdx}`).classList.remove('open');
-}
-
-// Close pickers on outside click
-document.addEventListener('click', (e) => {
-  if (!e.target.closest('.color-dot')) {
-    document.querySelectorAll('.color-picker-popover').forEach(p => p.classList.remove('open'));
-  }
-});
-
-// Board colors — cool bottom → warm top
+// ─── BOARD COLORS ───
 const ROW_COLORS = [
   ['#DBEAFE','#C7D2FE'],['#C7D2FE','#DDD6FE'],['#E0E7FF','#EDE9FE'],['#DDD6FE','#F5D0FE'],
   ['#FBE8F0','#FDE68A'],['#FEF3C7','#FDE68A'],['#FDE68A','#FED7AA'],['#FFEDD5','#FED7AA'],
   ['#FECACA','#FCA5A5'],['#FCA5A5','#F87171'],
 ];
 
-// ─── POSITIONS FROM REFERENCE BOARD ───
+// ─── ORIGINAL POSITIONS (Kevin's design) ───
 const SNAKES = {
-  17: 3, 20: 12, 37: 18, 48: 31, 55: 33, 63: 42,
-  78: 59, 84: 63, 85: 54, 93: 68, 97: 76, 98: 79,
+  98: 8,   // THE VILLAIN — mega drop
+  96: 42,  // Danger zone
+  92: 68,  // Danger zone
+  74: 53,  // Upper guard
+  62: 38,  // Mid-board
+  49: 31,  // Mid-board
+  16: 6    // Early setback
 };
-
 const LADDERS = {
-  4: 25, 9: 34, 18: 46, 24: 75, 35: 66, 41: 80, 52: 69, 90: 99,
+  4: 56,   // MEGA LADDER
+  21: 42,  // Mid-board boost
+  36: 57,  // Comeback corridor
+  47: 73,  // Push to danger zone
+  54: 74,  // Comeback exit
+  65: 86,  // Final approach
+  80: 100  // THE MAGIC LADDER 🌟
 };
 
-// Find the Big Tuna — snake with biggest drop
-const BIG_TUNA_HEAD = Object.entries(SNAKES).reduce((best, [h, t]) =>
-  (+h - t) > (best[0] - best[1]) ? [+h, t] : best, [0, 0])[0];
-// 85→54 = 31 drop = The Big Tuna
+// The Big Tuna = snake with biggest drop
+const BIG_TUNA_HEAD = Object.entries(SNAKES).reduce((best,[h,t]) => (+h-t)>(best[0]-best[1]) ? [+h,+t] : best, [0,0])[0];
+// 98→8 = 90 drop = The Big Tuna
 
-// Snake themes — GREEN cartoon style matching reference
-const SNAKE_THEMES = {};
-const snakeEntries = Object.keys(SNAKES).map(Number).sort((a,b) => b-a);
-const greenPalettes = [
-  { body: '#22C55E', belly: '#BBF7D0', head: '#16A34A', spots: '#14532D', tongue: '#EF4444' },
-  { body: '#34D399', belly: '#A7F3D0', head: '#059669', spots: '#064E3B', tongue: '#F87171' },
-  { body: '#4ADE80', belly: '#D1FAE5', head: '#15803D', spots: '#166534', tongue: '#FB923C' },
-  { body: '#10B981', belly: '#6EE7B7', head: '#047857', spots: '#064E3B', tongue: '#EF4444' },
-  { body: '#2DD4BF', belly: '#99F6E4', head: '#0D9488', spots: '#134E4A', tongue: '#F87171' },
-  { body: '#059669', belly: '#A7F3D0', head: '#047857', spots: '#022C22', tongue: '#FB923C' },
-];
-snakeEntries.forEach((h, i) => {
-  if (h === BIG_TUNA_HEAD) {
-    SNAKE_THEMES[h] = { isTuna: true };
-  } else {
-    const pal = greenPalettes[i % greenPalettes.length];
-    SNAKE_THEMES[h] = { ...pal, isTuna: false };
-  }
-});
-
-// Ladder themes — BLUE to match reference
-const LADDER_THEMES = {};
-const ladderEntries = Object.keys(LADDERS).map(Number).sort((a,b) => a-b);
-const bluePalettes = [
-  { rail: '#3B82F6', rung: '#93C5FD' },
-  { rail: '#2563EB', rung: '#60A5FA' },
-  { rail: '#1D4ED8', rung: '#93C5FD' },
-  { rail: '#3B82F6', rung: '#BFDBFE' },
-  { rail: '#2563EB', rung: '#60A5FA' },
-  { rail: '#1D4ED8', rung: '#93C5FD' },
-  { rail: '#3B82F6', rung: '#BFDBFE' },
-  { rail: '#2563EB', rung: '#60A5FA' },
-];
-ladderEntries.forEach((b, i) => {
-  const isMega = (b === 24); // 24→75 is the mega ladder
-  LADDER_THEMES[b] = { ...bluePalettes[i % bluePalettes.length], isMega };
-});
-
-let numPlayers = 2, playerNames = [...DEFAULT_NAMES], positions = [];
-let currentPlayer = 0, rolling = false, gameOver = false;
-let consecutiveSixes = 0;
+let numPlayers=2, playerNames=[...DEFAULT_NAMES], positions=[];
+let currentPlayer=0, rolling=false, gameOver=false, consecutiveSixes=0;
 
 // ─── AUDIO ───
 let audioCtx;
-function getAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); return audioCtx; }
-function playTone(freq, dur, type='sine', vol=0.12) {
-  try { const ctx=getAudio(), o=ctx.createOscillator(), g=ctx.createGain(); o.type=type; o.frequency.value=freq; g.gain.value=vol; g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur); o.connect(g).connect(ctx.destination); o.start(); o.stop(ctx.currentTime+dur); } catch(e){}
-}
-function sfxDice() {
-  try {
-    const ctx=getAudio(), bufSize=ctx.sampleRate*0.06;
-    const buf=ctx.createBuffer(1,bufSize,ctx.sampleRate);
-    const data=buf.getChannelData(0);
-    for(let i=0;i<bufSize;i++) data[i]=(Math.random()*2-1)*0.3*(1-i/bufSize);
-    const src=ctx.createBufferSource(); src.buffer=buf;
-    const bp=ctx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=1800+Math.random()*600; bp.Q.value=1.5;
-    const g=ctx.createGain(); g.gain.value=0.18;
-    src.connect(bp).connect(g).connect(ctx.destination); src.start();
-  } catch(e){}
-}
+function getAudio() { if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)(); return audioCtx; }
+function playTone(freq,dur,type='sine',vol=0.12) { try { const ctx=getAudio(),o=ctx.createOscillator(),g=ctx.createGain(); o.type=type; o.frequency.value=freq; g.gain.value=vol; g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur); o.connect(g).connect(ctx.destination); o.start(); o.stop(ctx.currentTime+dur); } catch(e){} }
+function sfxDice() { try { const ctx=getAudio(),bs=ctx.sampleRate*0.06,buf=ctx.createBuffer(1,bs,ctx.sampleRate),d=buf.getChannelData(0); for(let i=0;i<bs;i++) d[i]=(Math.random()*2-1)*0.3*(1-i/bs); const s=ctx.createBufferSource(); s.buffer=buf; const bp=ctx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=1800+Math.random()*600; bp.Q.value=1.5; const g=ctx.createGain(); g.gain.value=0.18; s.connect(bp).connect(g).connect(ctx.destination); s.start(); } catch(e){} }
 function sfxStep() { playTone(660,0.06,'sine',0.08); }
 function sfxSnake() { playTone(250,0.25,'sawtooth',0.08); setTimeout(()=>playTone(180,0.35,'sawtooth',0.06),150); setTimeout(()=>playTone(120,0.3,'sawtooth',0.04),350); }
 function sfxLadder() { [0,90,180,270].forEach((d,i)=>setTimeout(()=>playTone(440+i*110,0.12,'sine',0.09),d)); }
 function sfxWin() { [0,100,200,300,400,500].forEach((d,i)=>setTimeout(()=>playTone(350+i*70,0.22,'sine',0.1),d)); }
 function sfxSix() { playTone(880,0.12,'sine',0.1); setTimeout(()=>playTone(1100,0.12,'sine',0.1),80); setTimeout(()=>playTone(1320,0.15,'sine',0.1),160); }
-function sfxTripleSix() { const notes=[523,659,784,1047,784,1047,1319]; notes.forEach((f,i)=>setTimeout(()=>playTone(f,0.15,'sine',0.12),i*100)); }
+function sfxTripleSix() { [523,659,784,1047,784,1047,1319].forEach((f,i)=>setTimeout(()=>playTone(f,0.15,'sine',0.12),i*100)); }
+function sfxMegaSnake() { [0,80,160,240,320,400].forEach((d,i)=>setTimeout(()=>playTone(400-i*50,0.2,'sawtooth',0.08),d)); }
 function sfxMegaLadder() { [0,80,160,240,320,400,480].forEach((d,i)=>setTimeout(()=>playTone(300+i*80,0.15,'sine',0.1),d)); }
-function sfxTuna() {
-  // Comical "bloop bloop" descending water sound
-  [0,100,200,300,400,500].forEach((d,i)=>setTimeout(()=>{
-    playTone(600-i*70,0.15,'sine',0.1);
-    playTone(620-i*70,0.1,'triangle',0.06);
-  },d));
-}
+function sfxTuna() { [0,100,200,300,400,500].forEach((d,i)=>setTimeout(()=>{ playTone(600-i*70,0.15,'sine',0.1); playTone(620-i*70,0.1,'triangle',0.06); },d)); }
 
 // ─── MENU ───
 function setPlayerCount(n) {
-  numPlayers = n;
-  document.querySelectorAll('.player-count-btn').forEach((btn,i)=>btn.classList.toggle('selected',i+2===n));
-  document.querySelectorAll('.extra-player').forEach((row,i)=>row.style.display=(i+2<n)?'flex':'none');
+  numPlayers=n;
+  document.querySelectorAll('.player-count-btn').forEach((b,i)=>b.classList.toggle('selected',i+2===n));
+  document.querySelectorAll('.extra-player').forEach((r,i)=>r.style.display=(i+2<n)?'flex':'none');
 }
 
 // ─── BOARD ───
 function buildBoard() {
-  const grid = document.getElementById('board-grid');
-  grid.innerHTML = '';
-  for (let row = 9; row >= 0; row--) {
-    for (let col = 0; col < 10; col++) {
-      const num = getSquareNumber(row, col);
-      const cell = document.createElement('div');
-      const colors = ROW_COLORS[row];
-      cell.className = 'cell';
-      cell.style.background = col%2===0 ? colors[0] : colors[1];
-      cell.style.color = 'rgba(0,0,0,0.22)';
-      if (num === 100) cell.classList.add('square-100');
-      if (SNAKES[num]) cell.style.color = num === BIG_TUNA_HEAD ? 'rgba(56,189,248,0.4)' : 'rgba(34,197,94,0.35)';
-      if (LADDERS[num]) cell.style.color = 'rgba(59,130,246,0.35)';
-      cell.textContent = num;
-      cell.dataset.num = num;
-      grid.appendChild(cell);
-    }
+  const grid=document.getElementById('board-grid'); grid.innerHTML='';
+  for(let row=9;row>=0;row--) for(let col=0;col<10;col++) {
+    const num=getSquareNumber(row,col), cell=document.createElement('div'), colors=ROW_COLORS[row];
+    cell.className='cell'; cell.style.background=col%2===0?colors[0]:colors[1]; cell.style.color='rgba(0,0,0,0.22)';
+    if(num===100) cell.classList.add('square-100');
+    if(SNAKES[num]) cell.style.color=num===BIG_TUNA_HEAD?'rgba(56,189,248,0.4)':'rgba(220,38,38,0.35)';
+    if(LADDERS[num]) cell.style.color='rgba(22,163,74,0.35)';
+    cell.textContent=num; cell.dataset.num=num; grid.appendChild(cell);
   }
 }
-
-function getSquareNumber(row, col) { return row%2===0 ? row*10+col+1 : row*10+(10-col); }
-
+function getSquareNumber(row,col) { return row%2===0?row*10+col+1:row*10+(10-col); }
 function getSquarePos(num) {
-  if (num < 1) return { x: 0.05, y: 1.08 };
-  const row = Math.floor((num-1)/10);
-  const posInRow = (num-1)%10;
-  const col = row%2===0 ? posInRow : 9-posInRow;
-  return { x: (col+0.5)/10, y: 1-(row+0.5)/10 };
+  if(num<1) return {x:0.05,y:1.08};
+  const row=Math.floor((num-1)/10), posInRow=(num-1)%10, col=row%2===0?posInRow:9-posInRow;
+  return {x:(col+0.5)/10, y:1-(row+0.5)/10};
 }
 
-// ─── DRAW SNAKES & LADDERS ───
+// ═══════════════════════════════════════════════════
+// NEW FILLED-OUTLINE SNAKE RENDERER
+// Instead of a single stroked path, we compute two
+// edge curves that define the body silhouette with
+// natural width tapering, then fill between them.
+// ═══════════════════════════════════════════════════
+
+function sampleCubicBezier(p0,p1,p2,p3,t) {
+  const u=1-t;
+  return {
+    x: u*u*u*p0.x + 3*u*u*t*p1.x + 3*u*t*t*p2.x + t*t*t*p3.x,
+    y: u*u*u*p0.y + 3*u*u*t*p1.y + 3*u*t*t*p2.y + t*t*t*p3.y
+  };
+}
+
+function sampleCubicBezierTangent(p0,p1,p2,p3,t) {
+  const u=1-t;
+  return {
+    x: 3*u*u*(p1.x-p0.x)+6*u*t*(p2.x-p1.x)+3*t*t*(p3.x-p2.x),
+    y: 3*u*u*(p1.y-p0.y)+6*u*t*(p2.y-p1.y)+3*t*t*(p3.y-p2.y)
+  };
+}
+
+// Generate the spine control points for a snake
+function snakeSpine(x1,y1,x2,y2,seed) {
+  const dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy);
+  const px=-dy/len, py=dx/len;
+  const r1=((seed*17+31)%100)/100, r2=((seed*23+47)%100)/100;
+  const w1=(28+r1*22)*(r1>0.5?1:-1), w2=(28+r2*22)*(r2>0.5?-1:1);
+
+  // 3 cubic bezier segments forming the spine
+  const segments = [];
+  // Segment 0: head → 1/3
+  segments.push({
+    p0:{x:x1,y:y1},
+    p1:{x:x1+dx*0.12+px*w1, y:y1+dy*0.12+py*w1},
+    p2:{x:x1+dx*0.25+px*w2*0.4, y:y1+dy*0.25+py*w2*0.4},
+    p3:{x:x1+dx*0.33, y:y1+dy*0.33}
+  });
+  // Segment 1: 1/3 → 2/3
+  segments.push({
+    p0:{x:x1+dx*0.33, y:y1+dy*0.33},
+    p1:{x:x1+dx*0.42+px*w2, y:y1+dy*0.42+py*w2},
+    p2:{x:x1+dx*0.58+px*w1*0.6, y:y1+dy*0.58+py*w1*0.6},
+    p3:{x:x1+dx*0.66, y:y1+dy*0.66}
+  });
+  // Segment 2: 2/3 → tail
+  segments.push({
+    p0:{x:x1+dx*0.66, y:y1+dy*0.66},
+    p1:{x:x1+dx*0.75+px*w1*0.5, y:y1+dy*0.75+py*w1*0.5},
+    p2:{x:x1+dx*0.88+px*w2*0.25, y:y1+dy*0.88+py*w2*0.25},
+    p3:{x:x2,y:y2}
+  });
+  return segments;
+}
+
+// Sample points along the multi-segment spine
+function sampleSpine(segments, numSamples) {
+  const points=[];
+  const totalSegs=segments.length;
+  for(let i=0;i<=numSamples;i++) {
+    const globalT=i/numSamples;
+    const segIdx=Math.min(Math.floor(globalT*totalSegs), totalSegs-1);
+    const localT=(globalT*totalSegs)-segIdx;
+    const seg=segments[segIdx];
+    const pt=sampleCubicBezier(seg.p0,seg.p1,seg.p2,seg.p3,localT);
+    const tan=sampleCubicBezierTangent(seg.p0,seg.p1,seg.p2,seg.p3,localT);
+    const tanLen=Math.sqrt(tan.x*tan.x+tan.y*tan.y)||1;
+    points.push({x:pt.x, y:pt.y, nx:-tan.y/tanLen, ny:tan.x/tanLen});
+  }
+  return points;
+}
+
+// Width profile: thin at head, thick in middle, thin at tail
+function bodyWidth(t, maxW) {
+  // Bell-curve-ish: peaks around 0.35-0.55
+  return maxW * (0.2 + 0.8 * Math.sin(Math.PI * (0.1 + 0.8*t)) * (1 - 0.3*t*t));
+}
+
 function drawSnakesAndLadders() {
-  const svg = document.getElementById('board-svg');
-  svg.innerHTML = '';
-  const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
-  svg.appendChild(defs);
+  const svg=document.getElementById('board-svg'); svg.innerHTML='';
+  const defs=document.createElementNS('http://www.w3.org/2000/svg','defs'); svg.appendChild(defs);
 
-  // Ladders first (behind)
-  Object.entries(LADDERS).forEach(([bottom, top]) => {
-    drawLadder(svg, +bottom, +top, LADDER_THEMES[+bottom]);
-  });
+  // Ladders first
+  Object.entries(LADDERS).forEach(([b,t]) => drawLadder(svg,+b,+t));
   // Snakes on top
-  Object.entries(SNAKES).forEach(([head, tail]) => {
-    const theme = SNAKE_THEMES[+head];
-    if (theme.isTuna) {
-      drawTuna(svg, +head, +tail);
-    } else {
-      drawSnake(svg, +head, +tail, theme);
-    }
+  Object.entries(SNAKES).forEach(([h,t]) => {
+    if(+h===BIG_TUNA_HEAD) drawTuna(svg,+h,+t);
+    else drawSnake(svg,+h,+t);
   });
 }
 
-function drawLadder(svg, from, to, theme) {
+function drawLadder(svg, from, to) {
   const p1=getSquarePos(from), p2=getSquarePos(to);
   const x1=p1.x*500, y1=p1.y*500, x2=p2.x*500, y2=p2.y*500;
   const dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy);
   const nx=-dy/len, ny=dx/len;
-  const railW = theme.isMega ? 16 : 11;
-  const strokeW = theme.isMega ? 6 : 4.5;
-  const rungW = theme.isMega ? 4.5 : 3.5;
+  const isMega = (from===4 || from===80);
+  const railW = isMega?16:11, strokeW = isMega?6:4.5, rungW = isMega?4.5:3.5;
+  const railColor = isMega && to===100 ? '#CA8A04' : '#16A34A';
+  const rungColor = isMega && to===100 ? '#FDE047' : '#86EFAC';
 
   const g = document.createElementNS('http://www.w3.org/2000/svg','g');
   g.setAttribute('opacity','0.92');
-  if (theme.isMega) g.style.animation = 'megaGlow 2s ease-in-out infinite';
+  if(isMega) g.style.animation='megaGlow 2s ease-in-out infinite';
 
-  // Shadow
-  for (const s of [-1,1]) {
-    const sh = makeLine(x1+nx*railW/2*s+2, y1+ny*railW/2*s+2, x2+nx*railW/2*s+2, y2+ny*railW/2*s+2);
-    sh.setAttribute('stroke','rgba(0,0,0,0.12)'); sh.setAttribute('stroke-width', strokeW+2);
-    sh.setAttribute('stroke-linecap','round'); g.appendChild(sh);
+  for(const s of [-1,1]) {
+    const sh=makeLine(x1+nx*railW/2*s+2,y1+ny*railW/2*s+2,x2+nx*railW/2*s+2,y2+ny*railW/2*s+2);
+    sh.setAttribute('stroke','rgba(0,0,0,0.12)'); sh.setAttribute('stroke-width',strokeW+2); sh.setAttribute('stroke-linecap','round'); g.appendChild(sh);
   }
-  // Rails
-  for (const s of [-1,1]) {
-    const rail = makeLine(x1+nx*railW/2*s, y1+ny*railW/2*s, x2+nx*railW/2*s, y2+ny*railW/2*s);
-    rail.setAttribute('stroke', theme.rail); rail.setAttribute('stroke-width', strokeW);
-    rail.setAttribute('stroke-linecap','round'); g.appendChild(rail);
-    if (s === -1) {
-      const hl = makeLine(x1+nx*railW/2*s-1, y1+ny*railW/2*s-1, x2+nx*railW/2*s-1, y2+ny*railW/2*s-1);
-      hl.setAttribute('stroke','rgba(255,255,255,0.3)'); hl.setAttribute('stroke-width','2');
-      hl.setAttribute('stroke-linecap','round'); g.appendChild(hl);
-    }
+  for(const s of [-1,1]) {
+    const rail=makeLine(x1+nx*railW/2*s,y1+ny*railW/2*s,x2+nx*railW/2*s,y2+ny*railW/2*s);
+    rail.setAttribute('stroke',railColor); rail.setAttribute('stroke-width',strokeW); rail.setAttribute('stroke-linecap','round'); g.appendChild(rail);
+    if(s===-1) { const hl=makeLine(x1+nx*railW/2*s-1,y1+ny*railW/2*s-1,x2+nx*railW/2*s-1,y2+ny*railW/2*s-1); hl.setAttribute('stroke','rgba(255,255,255,0.3)'); hl.setAttribute('stroke-width','2'); hl.setAttribute('stroke-linecap','round'); g.appendChild(hl); }
   }
-  // Rungs
-  const numRungs = Math.max(3, Math.round(len/22));
-  for (let i = 1; i <= numRungs; i++) {
-    const t = i/(numRungs+1);
-    const rx=x1+dx*t, ry=y1+dy*t;
-    const rSh = makeLine(rx+nx*railW/2+1, ry+ny*railW/2+1, rx-nx*railW/2+1, ry-ny*railW/2+1);
-    rSh.setAttribute('stroke','rgba(0,0,0,0.06)'); rSh.setAttribute('stroke-width', rungW+1);
-    rSh.setAttribute('stroke-linecap','round'); g.appendChild(rSh);
-    const rung = makeLine(rx+nx*railW/2, ry+ny*railW/2, rx-nx*railW/2, ry-ny*railW/2);
-    rung.setAttribute('stroke', theme.rung); rung.setAttribute('stroke-width', rungW);
-    rung.setAttribute('stroke-linecap','round'); g.appendChild(rung);
+  const numRungs=Math.max(3,Math.round(len/22));
+  for(let i=1;i<=numRungs;i++) {
+    const t=i/(numRungs+1), rx=x1+dx*t, ry=y1+dy*t;
+    const rSh=makeLine(rx+nx*railW/2+1,ry+ny*railW/2+1,rx-nx*railW/2+1,ry-ny*railW/2+1);
+    rSh.setAttribute('stroke','rgba(0,0,0,0.06)'); rSh.setAttribute('stroke-width',rungW+1); rSh.setAttribute('stroke-linecap','round'); g.appendChild(rSh);
+    const rung=makeLine(rx+nx*railW/2,ry+ny*railW/2,rx-nx*railW/2,ry-ny*railW/2);
+    rung.setAttribute('stroke',rungColor); rung.setAttribute('stroke-width',rungW); rung.setAttribute('stroke-linecap','round'); g.appendChild(rung);
   }
-  // Icon at top
-  const icon = document.createElementNS('http://www.w3.org/2000/svg','text');
-  icon.setAttribute('x', x2); icon.setAttribute('y', y2 - 8);
-  icon.setAttribute('font-size', theme.isMega ? '16' : '12');
-  icon.setAttribute('text-anchor','middle');
-  icon.textContent = theme.isMega ? '⭐' : '✨';
-  g.appendChild(icon);
+  const icon=document.createElementNS('http://www.w3.org/2000/svg','text');
+  icon.setAttribute('x',x2); icon.setAttribute('y',y2-8); icon.setAttribute('font-size',isMega?'16':'12'); icon.setAttribute('text-anchor','middle');
+  icon.textContent=isMega&&to===100?'🌟':'✨'; g.appendChild(icon);
   svg.appendChild(g);
 }
 
-function drawSnake(svg, head, tail, theme) {
+// ─── FILLED-OUTLINE SNAKE ───
+function drawSnake(svg, head, tail) {
   const p1=getSquarePos(head), p2=getSquarePos(tail);
   const x1=p1.x*500, y1=p1.y*500, x2=p2.x*500, y2=p2.y*500;
-  const dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy);
-  const perpX=-dy/len, perpY=dx/len;
-
-  const seed = head*137;
+  const seed=head*137;
   const r1=((seed*17+31)%100)/100, r2=((seed*23+47)%100)/100;
-  const wave1 = (25+r1*20) * (r1>0.5?1:-1);
-  const wave2 = (25+r2*20) * (r2>0.5?-1:1);
 
-  const mx = x1+dx*0.33, my = y1+dy*0.33;
-  const mx2 = x1+dx*0.66, my2 = y1+dy*0.66;
-  const c1x = x1+dx*0.15+perpX*wave1, c1y = y1+dy*0.15+perpY*wave1;
-  const c2x = x1+dx*0.3+perpX*wave2*0.5, c2y = y1+dy*0.3+perpY*wave2*0.5;
-  const c4x = x1+dx*0.55+perpX*wave1*0.5, c4y = y1+dy*0.55+perpY*wave1*0.5;
-  const c6x = x1+dx*0.85+perpX*wave2*0.3, c6y = y1+dy*0.85+perpY*wave2*0.3;
+  // Green palette per-snake
+  const palettes=[
+    {body:'#22C55E',belly:'#BBF7D0',dark:'#14532D',head:'#16A34A',tongue:'#EF4444'},
+    {body:'#34D399',belly:'#A7F3D0',dark:'#064E3B',head:'#059669',tongue:'#F87171'},
+    {body:'#4ADE80',belly:'#D1FAE5',dark:'#166534',head:'#15803D',tongue:'#FB923C'},
+    {body:'#10B981',belly:'#6EE7B7',dark:'#064E3B',head:'#047857',tongue:'#EF4444'},
+    {body:'#2DD4BF',belly:'#99F6E4',dark:'#134E4A',head:'#0D9488',tongue:'#F87171'},
+    {body:'#059669',belly:'#A7F3D0',dark:'#022C22',head:'#047857',tongue:'#FB923C'},
+  ];
+  const pal=palettes[head%palettes.length];
+  const isMega=false; // Mega snake is now the Big Tuna
 
-  const d = `M ${x1} ${y1} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${mx} ${my} S ${c4x} ${c4y}, ${mx2} ${my2} S ${c6x} ${c6y}, ${x2} ${y2}`;
+  const segments=snakeSpine(x1,y1,x2,y2,seed);
+  const points=sampleSpine(segments, 40);
+  const maxW=8; // half-width at thickest point
 
-  const g = document.createElementNS('http://www.w3.org/2000/svg','g');
-  // Thicker bodies, more cartoon feel
-  const bodyW = 13;
-  const bellyW = 6;
-  const headR = 11;
-
-  g.style.animation = `snakeWiggle ${3+r1*2}s ease-in-out infinite`;
-  g.style.animationDelay = `${-r2*3}s`;
-  g.setAttribute('opacity','0.94');
-
-  // Body shadow
-  const shadow = makePath(d);
-  shadow.setAttribute('stroke','rgba(0,0,0,0.18)'); shadow.setAttribute('stroke-width', bodyW+4);
-  shadow.setAttribute('fill','none'); shadow.setAttribute('stroke-linecap','round');
-  shadow.setAttribute('transform','translate(2,2)'); g.appendChild(shadow);
-
-  // Main body — green
-  const body = makePath(d);
-  body.setAttribute('stroke', theme.body); body.setAttribute('stroke-width', bodyW);
-  body.setAttribute('fill','none'); body.setAttribute('stroke-linecap','round'); g.appendChild(body);
-
-  // Belly stripe — lighter green
-  const belly = makePath(d);
-  belly.setAttribute('stroke', theme.belly); belly.setAttribute('stroke-width', bellyW);
-  belly.setAttribute('fill','none'); belly.setAttribute('stroke-linecap','round');
-  belly.setAttribute('opacity','0.5'); g.appendChild(belly);
-
-  // Dark green spots/patches along body
-  for (let t = 0.1; t < 0.9; t += 0.12) {
-    const pt = getPointOnPath(x1,y1,c1x,c1y,c2x,c2y,mx,my,t);
-    const spot = document.createElementNS('http://www.w3.org/2000/svg','ellipse');
-    spot.setAttribute('cx', pt.x); spot.setAttribute('cy', pt.y);
-    spot.setAttribute('rx', 4.5); spot.setAttribute('ry', 3);
-    spot.setAttribute('fill', theme.spots); spot.setAttribute('opacity','0.35');
-    spot.setAttribute('transform', `rotate(${Math.atan2(dy,dx)*180/Math.PI} ${pt.x} ${pt.y})`);
-    g.appendChild(spot);
+  // Build left and right edge points
+  const leftEdge=[], rightEdge=[];
+  for(let i=0;i<points.length;i++) {
+    const t=i/(points.length-1);
+    const w=bodyWidth(t, maxW);
+    const p=points[i];
+    leftEdge.push({x:p.x+p.nx*w, y:p.y+p.ny*w});
+    rightEdge.push({x:p.x-p.nx*w, y:p.y-p.ny*w});
   }
 
-  // HEAD — cartoon style
-  const headG = document.createElementNS('http://www.w3.org/2000/svg','g');
-  const headEl = document.createElementNS('http://www.w3.org/2000/svg','ellipse');
-  headEl.setAttribute('cx',x1); headEl.setAttribute('cy',y1);
-  headEl.setAttribute('rx', headR); headEl.setAttribute('ry', headR*0.85);
-  headEl.setAttribute('fill', theme.head); headG.appendChild(headEl);
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+  g.style.animation=`snakeWiggle ${3+r1*2}s ease-in-out infinite`;
+  g.style.animationDelay=`${-r2*3}s`;
+  g.setAttribute('opacity','0.94');
 
-  // Head highlight
-  const hl = document.createElementNS('http://www.w3.org/2000/svg','ellipse');
-  hl.setAttribute('cx',x1-2); hl.setAttribute('cy',y1-2);
-  hl.setAttribute('rx',headR*0.4); hl.setAttribute('ry',headR*0.3);
-  hl.setAttribute('fill','rgba(255,255,255,0.3)'); headG.appendChild(hl);
+  // Build body outline path: left edge forward, right edge backward
+  let bodyPath='M '+leftEdge[0].x+' '+leftEdge[0].y;
+  for(let i=1;i<leftEdge.length;i++) bodyPath+=' L '+leftEdge[i].x+' '+leftEdge[i].y;
+  for(let i=rightEdge.length-1;i>=0;i--) bodyPath+=' L '+rightEdge[i].x+' '+rightEdge[i].y;
+  bodyPath+=' Z';
+
+  // Shadow
+  const shadow=makePath(bodyPath);
+  shadow.setAttribute('fill','rgba(0,0,0,0.15)'); shadow.setAttribute('transform','translate(2,2)');
+  g.appendChild(shadow);
+
+  // Main body fill
+  const bodyEl=makePath(bodyPath);
+  bodyEl.setAttribute('fill',pal.body); bodyEl.setAttribute('stroke',pal.dark);
+  bodyEl.setAttribute('stroke-width','1'); bodyEl.setAttribute('stroke-linejoin','round');
+  g.appendChild(bodyEl);
+
+  // Belly stripe — narrower path through the centre
+  let bellyPath='M';
+  const bellyEdgeL=[], bellyEdgeR=[];
+  for(let i=0;i<points.length;i++) {
+    const t=i/(points.length-1);
+    const w=bodyWidth(t, maxW)*0.3;
+    bellyEdgeL.push({x:points[i].x+points[i].nx*w, y:points[i].y+points[i].ny*w});
+    bellyEdgeR.push({x:points[i].x-points[i].nx*w, y:points[i].y-points[i].ny*w});
+  }
+  bellyPath=`M ${bellyEdgeL[0].x} ${bellyEdgeL[0].y}`;
+  for(let i=1;i<bellyEdgeL.length;i++) bellyPath+=` L ${bellyEdgeL[i].x} ${bellyEdgeL[i].y}`;
+  for(let i=bellyEdgeR.length-1;i>=0;i--) bellyPath+=` L ${bellyEdgeR[i].x} ${bellyEdgeR[i].y}`;
+  bellyPath+=' Z';
+  const bellyEl=makePath(bellyPath);
+  bellyEl.setAttribute('fill',pal.belly); bellyEl.setAttribute('opacity','0.45');
+  g.appendChild(bellyEl);
+
+  // Dark oval spots along the body
+  for(let i=4;i<points.length-4;i+=4) {
+    const p=points[i], t=i/(points.length-1);
+    const w=bodyWidth(t,maxW)*0.55;
+    const spot=document.createElementNS('http://www.w3.org/2000/svg','ellipse');
+    spot.setAttribute('cx',p.x+p.nx*w*0.5); spot.setAttribute('cy',p.y+p.ny*w*0.5);
+    spot.setAttribute('rx',3.5); spot.setAttribute('ry',2.2);
+    spot.setAttribute('fill',pal.dark); spot.setAttribute('opacity','0.3');
+    // Rotate spot to follow body direction
+    const angle=Math.atan2(p.ny,p.nx)*180/Math.PI+90;
+    spot.setAttribute('transform',`rotate(${angle} ${p.x+p.nx*w*0.5} ${p.y+p.ny*w*0.5})`);
+    g.appendChild(spot);
+    // Mirror spot on other side
+    const spot2=document.createElementNS('http://www.w3.org/2000/svg','ellipse');
+    spot2.setAttribute('cx',p.x-p.nx*w*0.5); spot2.setAttribute('cy',p.y-p.ny*w*0.5);
+    spot2.setAttribute('rx',3); spot2.setAttribute('ry',2);
+    spot2.setAttribute('fill',pal.dark); spot2.setAttribute('opacity','0.2');
+    spot2.setAttribute('transform',`rotate(${angle} ${p.x-p.nx*w*0.5} ${p.y-p.ny*w*0.5})`);
+    g.appendChild(spot2);
+  }
+
+  // ─── HEAD ───
+  const headR=11;
+  const headG=document.createElementNS('http://www.w3.org/2000/svg','g');
+
+  // Head shape — slightly elongated
+  const headEl=document.createElementNS('http://www.w3.org/2000/svg','ellipse');
+  headEl.setAttribute('cx',x1); headEl.setAttribute('cy',y1);
+  headEl.setAttribute('rx',headR); headEl.setAttribute('ry',headR*0.82);
+  headEl.setAttribute('fill',pal.head); headEl.setAttribute('stroke',pal.dark);
+  headEl.setAttribute('stroke-width','1'); headG.appendChild(headEl);
+
+  // Head sheen
+  const sheen=document.createElementNS('http://www.w3.org/2000/svg','ellipse');
+  sheen.setAttribute('cx',x1-2); sheen.setAttribute('cy',y1-3);
+  sheen.setAttribute('rx',headR*0.45); sheen.setAttribute('ry',headR*0.3);
+  sheen.setAttribute('fill','rgba(255,255,255,0.3)'); headG.appendChild(sheen);
 
   // Big cartoon eyes
-  const eyeSpread = headR * 0.5;
-  for (const ox of [-eyeSpread, eyeSpread]) {
-    const ew = document.createElementNS('http://www.w3.org/2000/svg','circle');
-    ew.setAttribute('cx',x1+ox); ew.setAttribute('cy',y1-headR*0.2);
-    ew.setAttribute('r', headR*0.38); ew.setAttribute('fill','#fff');
-    ew.setAttribute('stroke','rgba(0,0,0,0.08)'); ew.setAttribute('stroke-width','0.5');
-    headG.appendChild(ew);
-
-    const pupil = document.createElementNS('http://www.w3.org/2000/svg','circle');
-    pupil.setAttribute('cx',x1+ox+0.8); pupil.setAttribute('cy',y1-headR*0.15);
-    pupil.setAttribute('r', headR*0.22); pupil.setAttribute('fill','#1F2937');
-    headG.appendChild(pupil);
-
-    const shine = document.createElementNS('http://www.w3.org/2000/svg','circle');
-    shine.setAttribute('cx',x1+ox-0.5); shine.setAttribute('cy',y1-headR*0.3);
-    shine.setAttribute('r', headR*0.12); shine.setAttribute('fill','#fff');
-    headG.appendChild(shine);
+  const eyeOff=headR*0.48;
+  for(const side of [-1,1]) {
+    // White
+    const ew=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    ew.setAttribute('cx',x1+eyeOff*side); ew.setAttribute('cy',y1-headR*0.15);
+    ew.setAttribute('r',headR*0.4); ew.setAttribute('fill','#fff');
+    ew.setAttribute('stroke','rgba(0,0,0,0.08)'); ew.setAttribute('stroke-width','0.5'); headG.appendChild(ew);
+    // Pupil
+    const pupil=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    pupil.setAttribute('cx',x1+eyeOff*side+side*0.8); pupil.setAttribute('cy',y1-headR*0.1);
+    pupil.setAttribute('r',headR*0.24); pupil.setAttribute('fill','#1E293B'); headG.appendChild(pupil);
+    // Shine
+    const shine=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    shine.setAttribute('cx',x1+eyeOff*side-side*0.5); shine.setAttribute('cy',y1-headR*0.28);
+    shine.setAttribute('r',headR*0.13); shine.setAttribute('fill','#fff'); headG.appendChild(shine);
   }
 
   // Cute smile
-  const mouth = document.createElementNS('http://www.w3.org/2000/svg','path');
-  mouth.setAttribute('d',`M ${x1-3.5} ${y1+headR*0.15} Q ${x1} ${y1+headR*0.5} ${x1+3.5} ${y1+headR*0.15}`);
-  mouth.setAttribute('stroke', theme.spots); mouth.setAttribute('stroke-width','1.2');
-  mouth.setAttribute('fill','none'); mouth.setAttribute('stroke-linecap','round');
-  headG.appendChild(mouth);
+  const mouth=makePath(`M ${x1-4} ${y1+headR*0.2} Q ${x1} ${y1+headR*0.55} ${x1+4} ${y1+headR*0.2}`);
+  mouth.setAttribute('stroke',pal.dark); mouth.setAttribute('stroke-width','1.3');
+  mouth.setAttribute('fill','none'); mouth.setAttribute('stroke-linecap','round'); headG.appendChild(mouth);
 
-  // Forked tongue — red
-  const ty = y1 + headR * 0.85;
-  const t1 = makePath(`M ${x1} ${ty} Q ${x1-1.5} ${ty+6} ${x1-4} ${ty+8}`);
-  t1.setAttribute('stroke',theme.tongue); t1.setAttribute('stroke-width','1.5');
-  t1.setAttribute('fill','none'); t1.setAttribute('stroke-linecap','round');
-  const t2 = makePath(`M ${x1} ${ty} Q ${x1+1.5} ${ty+6} ${x1+4} ${ty+8}`);
-  t2.setAttribute('stroke',theme.tongue); t2.setAttribute('stroke-width','1.5');
-  t2.setAttribute('fill','none'); t2.setAttribute('stroke-linecap','round');
-  headG.appendChild(t1); headG.appendChild(t2);
+  // Forked tongue
+  const ty=y1+headR*0.85;
+  for(const side of [-1,1]) {
+    const t=makePath(`M ${x1} ${ty} Q ${x1+side*2} ${ty+6} ${x1+side*5} ${ty+9}`);
+    t.setAttribute('stroke',pal.tongue); t.setAttribute('stroke-width','1.5');
+    t.setAttribute('fill','none'); t.setAttribute('stroke-linecap','round'); headG.appendChild(t);
+  }
   g.appendChild(headG);
 
-  // Tail — cute curled tip
-  const tailEl = document.createElementNS('http://www.w3.org/2000/svg','circle');
-  tailEl.setAttribute('cx',x2); tailEl.setAttribute('cy',y2);
-  tailEl.setAttribute('r', 3.5);
-  tailEl.setAttribute('fill', theme.belly); g.appendChild(tailEl);
+  // Cute curled tail tip
+  const lastPt=points[points.length-1];
+  const tailTip=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  tailTip.setAttribute('cx',x2); tailTip.setAttribute('cy',y2);
+  tailTip.setAttribute('r',2.5); tailTip.setAttribute('fill',pal.belly);
+  tailTip.setAttribute('stroke',pal.dark); tailTip.setAttribute('stroke-width','0.5');
+  g.appendChild(tailTip);
 
   svg.appendChild(g);
 }
@@ -570,397 +565,272 @@ function drawTuna(svg, head, tail) {
   const p1=getSquarePos(head), p2=getSquarePos(tail);
   const x1=p1.x*500, y1=p1.y*500, x2=p2.x*500, y2=p2.y*500;
   const dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy);
-  const perpX=-dy/len, perpY=dx/len;
-  const angle = Math.atan2(dy,dx);
+  const angle=Math.atan2(dy,dx);
+  const seed=head*137;
 
-  const g = document.createElementNS('http://www.w3.org/2000/svg','g');
-  g.style.animation = 'tunaGlow 2.5s ease-in-out infinite';
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+  g.style.animation='tunaGlow 2.5s ease-in-out infinite';
   g.setAttribute('opacity','0.95');
 
-  // Draw a curved path from head to tail (the swim path)
-  const wave = 30;
-  const mx=x1+dx*0.33+perpX*wave, my=y1+dy*0.33+perpY*wave;
-  const mx2=x1+dx*0.66-perpX*wave*0.5, my2=y1+dy*0.66-perpY*wave*0.5;
-  const swimPath = `M ${x1} ${y1} Q ${mx} ${my} ${x1+dx*0.5} ${y1+dy*0.5} Q ${mx2} ${my2} ${x2} ${y2}`;
+  // The tuna's swim path — a gentle curve from head to tail
+  const segments=snakeSpine(x1,y1,x2,y2,seed);
+  const points=sampleSpine(segments,40);
 
-  // Dotted swim trail (bubbles)
-  const trail = makePath(swimPath);
-  trail.setAttribute('stroke','rgba(56,189,248,0.3)'); trail.setAttribute('stroke-width','4');
-  trail.setAttribute('fill','none'); trail.setAttribute('stroke-dasharray','3,8');
-  trail.setAttribute('stroke-linecap','round'); g.appendChild(trail);
+  // Draw the fish body as a filled shape spanning the FULL path
+  // Width tapers: pointy nose → fat middle → narrow near tail → tail fin flare
+  const leftEdge=[], rightEdge=[];
+  for(let i=0;i<points.length;i++) {
+    const t=i/(points.length-1);
+    // Fish body profile: pointy head, fat middle, thin tail stem, flare at very end
+    let w;
+    if(t<0.08) w=3+t*80; // pointy nose
+    else if(t<0.5) w=9+Math.sin((t-0.08)/0.42*Math.PI)*6; // fat body
+    else if(t<0.85) w=9-((t-0.5)/0.35)*7; // taper to tail stem
+    else w=2+((t-0.85)/0.15)*5; // tail fin flare
+    leftEdge.push({x:points[i].x+points[i].nx*w, y:points[i].y+points[i].ny*w});
+    rightEdge.push({x:points[i].x-points[i].nx*w, y:points[i].y-points[i].ny*w});
+  }
 
-  // Bubbles along path
-  for (let t = 0.2; t < 0.9; t += 0.15) {
-    const bx = x1+dx*t+perpX*(Math.sin(t*8)*12);
-    const by = y1+dy*t+perpY*(Math.sin(t*8)*12);
-    const bubble = document.createElementNS('http://www.w3.org/2000/svg','circle');
-    bubble.setAttribute('cx', bx); bubble.setAttribute('cy', by);
-    bubble.setAttribute('r', 2+Math.random()*2.5);
-    bubble.setAttribute('fill','rgba(186,230,253,0.5)');
-    bubble.setAttribute('stroke','rgba(56,189,248,0.3)');
-    bubble.setAttribute('stroke-width','0.5');
+  // Build body outline
+  let bodyPath='M '+leftEdge[0].x+' '+leftEdge[0].y;
+  for(let i=1;i<leftEdge.length;i++) bodyPath+=' L '+leftEdge[i].x+' '+leftEdge[i].y;
+  for(let i=rightEdge.length-1;i>=0;i--) bodyPath+=' L '+rightEdge[i].x+' '+rightEdge[i].y;
+  bodyPath+=' Z';
+
+  // Shadow
+  const shadow=makePath(bodyPath);
+  shadow.setAttribute('fill','rgba(0,0,0,0.12)'); shadow.setAttribute('transform','translate(2,2)');
+  g.appendChild(shadow);
+
+  // Main body — blue tuna
+  const bodyEl=makePath(bodyPath);
+  bodyEl.setAttribute('fill','#0EA5E9'); bodyEl.setAttribute('stroke','#0369A1');
+  bodyEl.setAttribute('stroke-width','1.5'); bodyEl.setAttribute('stroke-linejoin','round');
+  g.appendChild(bodyEl);
+
+  // Silver belly (bottom half)
+  let bellyPath='M';
+  const bellyL=[], bellyR=[];
+  for(let i=0;i<points.length;i++) {
+    const t=i/(points.length-1);
+    let w;
+    if(t<0.08) w=1+t*40;
+    else if(t<0.5) w=4+Math.sin((t-0.08)/0.42*Math.PI)*3;
+    else if(t<0.85) w=4-((t-0.5)/0.35)*3;
+    else w=1;
+    bellyL.push({x:points[i].x+points[i].nx*w*0.2, y:points[i].y+points[i].ny*w*0.2});
+    bellyR.push({x:points[i].x-points[i].nx*w, y:points[i].y-points[i].ny*w});
+  }
+  bellyPath=`M ${bellyL[0].x} ${bellyL[0].y}`;
+  for(let i=1;i<bellyL.length;i++) bellyPath+=` L ${bellyL[i].x} ${bellyL[i].y}`;
+  for(let i=bellyR.length-1;i>=0;i--) bellyPath+=` L ${bellyR[i].x} ${bellyR[i].y}`;
+  bellyPath+=' Z';
+  const bellyEl=makePath(bellyPath);
+  bellyEl.setAttribute('fill','#BAE6FD'); bellyEl.setAttribute('opacity','0.5');
+  g.appendChild(bellyEl);
+
+  // Dorsal fin (top, near 1/3 body)
+  const finIdx=Math.round(points.length*0.3);
+  const fp=points[finIdx], fw=bodyWidth(0.3,8);
+  const finTip={x:fp.x+fp.nx*18, y:fp.y+fp.ny*18};
+  const finBase1=points[Math.max(0,finIdx-3)], finBase2=points[Math.min(points.length-1,finIdx+3)];
+  const dorsal=makePath(`M ${finBase1.x+finBase1.nx*fw} ${finBase1.y+finBase1.ny*fw} Q ${finTip.x} ${finTip.y} ${finBase2.x+finBase2.nx*fw} ${finBase2.y+finBase2.ny*fw}`);
+  dorsal.setAttribute('fill','#0284C7'); dorsal.setAttribute('stroke','#0369A1');
+  dorsal.setAttribute('stroke-width','0.8'); g.appendChild(dorsal);
+
+  // Pectoral fin (side, near 1/4 body)
+  const pIdx=Math.round(points.length*0.25);
+  const pp=points[pIdx];
+  const pFin=makePath(`M ${pp.x-pp.nx*4} ${pp.y-pp.ny*4} Q ${pp.x-pp.nx*14+pp.ny*4} ${pp.y-pp.ny*14-pp.nx*4} ${pp.x-pp.nx*2+pp.ny*8} ${pp.y-pp.ny*2-pp.nx*8}`);
+  pFin.setAttribute('fill','#38BDF8'); pFin.setAttribute('stroke','#0369A1');
+  pFin.setAttribute('stroke-width','0.6'); g.appendChild(pFin);
+
+  // Tail fin — V-shape at the end
+  const tp=points[points.length-1];
+  const tp2=points[points.length-3]||tp;
+  const tailDir={x:tp.x-tp2.x, y:tp.y-tp2.y};
+  const tLen=Math.sqrt(tailDir.x*tailDir.x+tailDir.y*tailDir.y)||1;
+  const td={x:tailDir.x/tLen, y:tailDir.y/tLen};
+  const tn={x:-td.y, y:td.x};
+  const tailFin=makePath(`M ${tp.x} ${tp.y} L ${tp.x+td.x*14+tn.x*10} ${tp.y+td.y*14+tn.y*10} L ${tp.x+td.x*4} ${tp.y+td.y*4} L ${tp.x+td.x*14-tn.x*10} ${tp.y+td.y*14-tn.y*10} Z`);
+  tailFin.setAttribute('fill','#0284C7'); tailFin.setAttribute('stroke','#0369A1');
+  tailFin.setAttribute('stroke-width','0.8'); g.appendChild(tailFin);
+
+  // Stripes on body
+  for(let i=6;i<points.length-8;i+=5) {
+    const p=points[i], t=i/(points.length-1);
+    let w2;
+    if(t<0.08) w2=3+t*80; else if(t<0.5) w2=9+Math.sin((t-0.08)/0.42*Math.PI)*6; else w2=5;
+    const stripe=makeLine(p.x+p.nx*w2*0.8,p.y+p.ny*w2*0.8,p.x-p.nx*w2*0.3,p.y-p.ny*w2*0.3);
+    stripe.setAttribute('stroke','rgba(3,105,161,0.15)'); stripe.setAttribute('stroke-width','2');
+    stripe.setAttribute('stroke-linecap','round'); g.appendChild(stripe);
+  }
+
+  // Eye — big cartoon (at ~10% along body)
+  const eyeIdx=Math.round(points.length*0.1);
+  const ep=points[eyeIdx];
+  const eyeX=ep.x+ep.nx*3, eyeY=ep.y+ep.ny*3;
+  const ew=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  ew.setAttribute('cx',eyeX); ew.setAttribute('cy',eyeY);
+  ew.setAttribute('r',5); ew.setAttribute('fill','#fff');
+  ew.setAttribute('stroke','rgba(0,0,0,0.1)'); ew.setAttribute('stroke-width','0.5'); g.appendChild(ew);
+  const pupil=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  pupil.setAttribute('cx',eyeX+1); pupil.setAttribute('cy',eyeY-0.5);
+  pupil.setAttribute('r',3); pupil.setAttribute('fill','#1E293B'); g.appendChild(pupil);
+  const shine=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  shine.setAttribute('cx',eyeX-0.5); shine.setAttribute('cy',eyeY-2);
+  shine.setAttribute('r',1.5); shine.setAttribute('fill','#fff'); g.appendChild(shine);
+
+  // Mouth at nose
+  const mp=points[1];
+  const mouthDir={x:points[2].x-points[0].x, y:points[2].y-points[0].y};
+  const mouth=makePath(`M ${mp.x-mp.nx*2} ${mp.y-mp.ny*2} Q ${mp.x+mouthDir.x*0.3} ${mp.y+mouthDir.y*0.3} ${mp.x+mp.nx*2} ${mp.y+mp.ny*2}`);
+  mouth.setAttribute('stroke','#0369A1'); mouth.setAttribute('stroke-width','1.5');
+  mouth.setAttribute('fill','none'); mouth.setAttribute('stroke-linecap','round'); g.appendChild(mouth);
+
+  // Bubbles trailing from the fish
+  for(let i=0;i<5;i++) {
+    const bx=x1+(x2-x1)*(-0.05-i*0.06)+Math.random()*8-4;
+    const by=y1+(y2-y1)*(-0.05-i*0.06)+Math.random()*8-4;
+    const bubble=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    bubble.setAttribute('cx',bx); bubble.setAttribute('cy',by);
+    bubble.setAttribute('r',1.5+Math.random()*2.5);
+    bubble.setAttribute('fill','rgba(186,230,253,0.4)');
+    bubble.setAttribute('stroke','rgba(56,189,248,0.3)'); bubble.setAttribute('stroke-width','0.5');
     g.appendChild(bubble);
   }
 
-  // ─── TUNA FISH at the head position ───
-  const tunaG = document.createElementNS('http://www.w3.org/2000/svg','g');
-  tunaG.setAttribute('transform', `translate(${x1},${y1})`);
-
-  // Body shadow
-  const bodyShadow = document.createElementNS('http://www.w3.org/2000/svg','ellipse');
-  bodyShadow.setAttribute('cx', 2); bodyShadow.setAttribute('cy', 2);
-  bodyShadow.setAttribute('rx', 18); bodyShadow.setAttribute('ry', 11);
-  bodyShadow.setAttribute('fill','rgba(0,0,0,0.15)'); tunaG.appendChild(bodyShadow);
-
-  // Main body — blue tuna
-  const tunaBody = document.createElementNS('http://www.w3.org/2000/svg','ellipse');
-  tunaBody.setAttribute('cx', 0); tunaBody.setAttribute('cy', 0);
-  tunaBody.setAttribute('rx', 18); tunaBody.setAttribute('ry', 11);
-  tunaBody.setAttribute('fill','#0EA5E9');
-  tunaBody.setAttribute('stroke','#0369A1'); tunaBody.setAttribute('stroke-width','1.5');
-  tunaG.appendChild(tunaBody);
-
-  // Belly gradient
-  const tunaGrad = document.createElementNS('http://www.w3.org/2000/svg','ellipse');
-  tunaGrad.setAttribute('cx', 0); tunaGrad.setAttribute('cy', 3);
-  tunaGrad.setAttribute('rx', 14); tunaGrad.setAttribute('ry', 6);
-  tunaGrad.setAttribute('fill','#BAE6FD'); tunaGrad.setAttribute('opacity','0.5');
-  tunaG.appendChild(tunaGrad);
-
-  // Dorsal fin (top)
-  const dorsalFin = makePath('M -4 -10 Q 0 -20, 8 -10');
-  dorsalFin.setAttribute('fill','#0284C7'); dorsalFin.setAttribute('stroke','#0369A1');
-  dorsalFin.setAttribute('stroke-width','1'); tunaG.appendChild(dorsalFin);
-
-  // Tail fin
-  const tailFin = makePath('M -16 0 L -26 -9 L -20 0 L -26 9 Z');
-  tailFin.setAttribute('fill','#0284C7'); tailFin.setAttribute('stroke','#0369A1');
-  tailFin.setAttribute('stroke-width','1'); tunaG.appendChild(tailFin);
-
-  // Pectoral fin (side)
-  const pectoralFin = makePath('M 4 4 Q 8 14, -2 12');
-  pectoralFin.setAttribute('fill','#38BDF8'); pectoralFin.setAttribute('stroke','#0369A1');
-  pectoralFin.setAttribute('stroke-width','0.8'); tunaG.appendChild(pectoralFin);
-
-  // Stripes on body
-  for (let i = -2; i <= 2; i++) {
-    const stripe = makeLine(i*5-2, -8, i*5+2, 8);
-    stripe.setAttribute('stroke','rgba(3,105,161,0.15)'); stripe.setAttribute('stroke-width','2');
-    stripe.setAttribute('stroke-linecap','round'); tunaG.appendChild(stripe);
-  }
-
-  // Eye — big cartoon eye like the snakes
-  const eyeWhite = document.createElementNS('http://www.w3.org/2000/svg','circle');
-  eyeWhite.setAttribute('cx', 10); eyeWhite.setAttribute('cy', -2);
-  eyeWhite.setAttribute('r', 5); eyeWhite.setAttribute('fill','#fff');
-  eyeWhite.setAttribute('stroke','rgba(0,0,0,0.1)'); eyeWhite.setAttribute('stroke-width','0.5');
-  tunaG.appendChild(eyeWhite);
-
-  const eyePupil = document.createElementNS('http://www.w3.org/2000/svg','circle');
-  eyePupil.setAttribute('cx', 11); eyePupil.setAttribute('cy', -1.5);
-  eyePupil.setAttribute('r', 3); eyePupil.setAttribute('fill','#1E293B');
-  tunaG.appendChild(eyePupil);
-
-  const eyeShine = document.createElementNS('http://www.w3.org/2000/svg','circle');
-  eyeShine.setAttribute('cx', 9.5); eyeShine.setAttribute('cy', -3);
-  eyeShine.setAttribute('r', 1.5); eyeShine.setAttribute('fill','#fff');
-  tunaG.appendChild(eyeShine);
-
-  // Mouth — slightly open, cheeky
-  const mouth = makePath('M 16 0 Q 18 2, 16 4');
-  mouth.setAttribute('stroke','#0369A1'); mouth.setAttribute('stroke-width','1.5');
-  mouth.setAttribute('fill','none'); mouth.setAttribute('stroke-linecap','round');
-  tunaG.appendChild(mouth);
-
-  g.appendChild(tunaG);
-
-  // "BIG TUNA" label
-  const label = document.createElementNS('http://www.w3.org/2000/svg','text');
-  label.setAttribute('x', x1); label.setAttribute('y', y1 - 22);
-  label.setAttribute('font-size', '10'); label.setAttribute('font-weight', '800');
+  // "BIG TUNA" label near the head
+  const label=document.createElementNS('http://www.w3.org/2000/svg','text');
+  label.setAttribute('x',x1); label.setAttribute('y',y1-18);
+  label.setAttribute('font-size','9'); label.setAttribute('font-weight','800');
   label.setAttribute('text-anchor','middle'); label.setAttribute('fill','#38BDF8');
-  label.setAttribute('stroke','rgba(0,0,0,0.3)'); label.setAttribute('stroke-width','0.3');
-  label.textContent = '🐟 BIG TUNA';
-  g.appendChild(label);
-
-  // Small tuna icon at the tail end too
-  const tailIcon = document.createElementNS('http://www.w3.org/2000/svg','text');
-  tailIcon.setAttribute('x', x2); tailIcon.setAttribute('y', y2 + 4);
-  tailIcon.setAttribute('font-size', '12'); tailIcon.setAttribute('text-anchor','middle');
-  tailIcon.textContent = '🐟';
-  g.appendChild(tailIcon);
+  label.setAttribute('stroke','rgba(0,0,0,0.4)'); label.setAttribute('stroke-width','0.3');
+  label.textContent='🐟 BIG TUNA'; g.appendChild(label);
 
   svg.appendChild(g);
 }
 
-function getPointOnPath(x0,y0,cx1,cy1,cx2,cy2,x3,y3,t) {
-  const u=1-t;
-  return { x: u*u*u*x0+3*u*u*t*cx1+3*u*t*t*cx2+t*t*t*x3, y: u*u*u*y0+3*u*u*t*cy1+3*u*t*t*cy2+t*t*t*y3 };
-}
 function makePath(d) { const p=document.createElementNS('http://www.w3.org/2000/svg','path'); p.setAttribute('d',d); return p; }
 function makeLine(x1,y1,x2,y2) { const l=document.createElementNS('http://www.w3.org/2000/svg','line'); l.setAttribute('x1',x1); l.setAttribute('y1',y1); l.setAttribute('x2',x2); l.setAttribute('y2',y2); return l; }
 
 // ─── TOKENS ───
 function createTokens() {
-  const c=document.getElementById('board-container');
-  c.querySelectorAll('.token').forEach(t=>t.remove());
-  for (let i=0; i<numPlayers; i++) {
-    const token=document.createElement('div');
-    token.className='token'; token.id=`token-${i}`;
-    token.innerHTML=createPinSVG(playerColors[i],i);
-    c.appendChild(token); positionToken(i,false);
+  const c=document.getElementById('board-container'); c.querySelectorAll('.token').forEach(t=>t.remove());
+  for(let i=0;i<numPlayers;i++) {
+    const token=document.createElement('div'); token.className='token'; token.id=`token-${i}`;
+    token.innerHTML=createPinSVG(playerColors[i],i); c.appendChild(token); positionToken(i,false);
   }
 }
-
 function createPinSVG(color,idx) {
   const light=lighten(color,40), dark=darken(color,20);
-  const initials = playerNames[idx] ? playerNames[idx].charAt(0).toUpperCase() : (idx+1);
-  return `<svg viewBox="0 0 40 52" xmlns="http://www.w3.org/2000/svg">
-    <defs><radialGradient id="pg${idx}" cx="35%" cy="30%"><stop offset="0%" stop-color="${light}"/><stop offset="100%" stop-color="${color}"/></radialGradient>
-    <filter id="ds${idx}"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.35"/></filter></defs>
-    <g filter="url(#ds${idx})">
-      <path d="M20 50 C20 50 2 30 2 17 A18 18 0 1 1 38 17 C38 30 20 50 20 50Z" fill="url(#pg${idx})" stroke="${dark}" stroke-width="1.5"/>
-      <circle cx="20" cy="16" r="8.5" fill="white" opacity="0.92"/>
-      <text x="20" y="20.5" text-anchor="middle" font-size="13" font-weight="bold" fill="${dark}" font-family="system-ui">${initials}</text>
-    </g></svg>`;
+  const initials=playerNames[idx]?playerNames[idx].charAt(0).toUpperCase():(idx+1);
+  return `<svg viewBox="0 0 40 52" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="pg${idx}" cx="35%" cy="30%"><stop offset="0%" stop-color="${light}"/><stop offset="100%" stop-color="${color}"/></radialGradient><filter id="ds${idx}"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.35"/></filter></defs><g filter="url(#ds${idx})"><path d="M20 50 C20 50 2 30 2 17 A18 18 0 1 1 38 17 C38 30 20 50 20 50Z" fill="url(#pg${idx})" stroke="${dark}" stroke-width="1.5"/><circle cx="20" cy="16" r="8.5" fill="white" opacity="0.92"/><text x="20" y="20.5" text-anchor="middle" font-size="13" font-weight="bold" fill="${dark}" font-family="system-ui">${initials}</text></g></svg>`;
 }
-
 function lighten(hex,pct) { const [r,g,b]=hexToRgb(hex); return '#'+[r,g,b].map(c=>Math.min(255,c+Math.round((255-c)*pct/100)).toString(16).padStart(2,'0')).join(''); }
 function darken(hex,pct) { const [r,g,b]=hexToRgb(hex); return '#'+[r,g,b].map(c=>Math.max(0,c-Math.round(c*pct/100)).toString(16).padStart(2,'0')).join(''); }
 function hexToRgb(hex) { return [parseInt(hex.slice(1,3),16),parseInt(hex.slice(3,5),16),parseInt(hex.slice(5,7),16)]; }
 
-function positionToken(idx, animate=true) {
-  const token=document.getElementById(`token-${idx}`);
-  if (!token) return;
+function positionToken(idx,animate=true) {
+  const token=document.getElementById(`token-${idx}`); if(!token) return;
   const pos=positions[idx], sq=getSquarePos(pos);
   const same=positions.reduce((a,p,i)=>{if(p===pos&&i<idx)a++;return a;},0);
   const off=[[0,0],[0.025,0],[-0.025,0],[0,0.025]][same]||[0,0];
-  if (!animate) token.style.transition='none';
-  token.style.left=`${(sq.x+off[0])*100-4.25}%`;
-  token.style.top=`${(sq.y+off[1])*100-7}%`;
-  if (!animate) requestAnimationFrame(()=>{token.style.transition='';});
+  if(!animate) token.style.transition='none';
+  token.style.left=`${(sq.x+off[0])*100-4.25}%`; token.style.top=`${(sq.y+off[1])*100-7}%`;
+  if(!animate) requestAnimationFrame(()=>{token.style.transition='';});
 }
 
 // ─── CONTROLS ───
 function buildControls() {
-  const controls=document.getElementById('controls');
-  controls.innerHTML='';
-  for (let i=0; i<numPlayers; i++) {
-    const ind=document.createElement('div');
-    ind.className='player-indicator';
+  const controls=document.getElementById('controls'); controls.innerHTML='';
+  for(let i=0;i<numPlayers;i++) {
+    const ind=document.createElement('div'); ind.className='player-indicator';
     ind.innerHTML=`<div class="pip ${i===0?'active':''}" id="pip-${i}" style="background:${playerColors[i]}"><span class="pos-label" id="pos-${i}">Start</span></div><span class="name">${playerNames[i]}</span>`;
     controls.appendChild(ind);
-    if (i===Math.floor((numPlayers-1)/2)) {
-      const area=document.createElement('div');
-      area.className='dice-area';
+    if(i===Math.floor((numPlayers-1)/2)) {
+      const area=document.createElement('div'); area.className='dice-area';
       area.innerHTML=`<button class="dice-btn" id="dice-btn" onclick="rollDice()"><div class="dice-face" id="dice-face">${diceFaceHTML(1)}</div></button><span class="roll-hint" id="roll-hint">Tap to roll!</span>`;
       controls.appendChild(area);
     }
   }
 }
-
-function diceFaceHTML(n) {
-  const p={1:[0,0,0,0,1,0,0,0,0],2:[0,0,1,0,0,0,1,0,0],3:[0,0,1,0,1,0,1,0,0],4:[1,0,1,0,0,0,1,0,1],5:[1,0,1,0,1,0,1,0,1],6:[1,0,1,1,0,1,1,0,1]};
-  return (p[n]||p[1]).map(v=>`<div class="dot ${v?'show':''}"></div>`).join('');
-}
+function diceFaceHTML(n) { const p={1:[0,0,0,0,1,0,0,0,0],2:[0,0,1,0,0,0,1,0,0],3:[0,0,1,0,1,0,1,0,0],4:[1,0,1,0,0,0,1,0,1],5:[1,0,1,0,1,0,1,0,1],6:[1,0,1,1,0,1,1,0,1]}; return(p[n]||p[1]).map(v=>`<div class="dot ${v?'show':''}"></div>`).join(''); }
 
 function updateTurnUI() {
   document.getElementById('turn-dot').style.background=playerColors[currentPlayer];
   document.getElementById('turn-label').textContent=`${playerNames[currentPlayer]}'s turn`;
-  for (let i=0; i<numPlayers; i++) {
+  for(let i=0;i<numPlayers;i++) {
     const pip=document.getElementById(`pip-${i}`);
     if(pip) { pip.classList.toggle('active',i===currentPlayer); pip.style.background=playerColors[i]; }
     const pl=document.getElementById(`pos-${i}`);
     if(pl) pl.textContent=positions[i]<1?'Start':positions[i];
   }
-  for (let i=0; i<numPlayers; i++) {
-    const t=document.getElementById(`token-${i}`);
-    if(t) t.classList.toggle('active-turn',i===currentPlayer);
-  }
+  for(let i=0;i<numPlayers;i++) { const t=document.getElementById(`token-${i}`); if(t) t.classList.toggle('active-turn',i===currentPlayer); }
 }
-
-function showMessage(msg,cls='') {
-  const el=document.getElementById('message');
-  el.textContent=msg; el.className='message'+(cls?' '+cls:'');
-}
+function showMessage(msg,cls='') { const el=document.getElementById('message'); el.textContent=msg; el.className='message'+(cls?' '+cls:''); }
 
 // ─── DICE & GAME LOGIC ───
 async function rollDice() {
-  if (rolling||gameOver) return;
-  rolling=true;
+  if(rolling||gameOver) return; rolling=true;
   const btn=document.getElementById('dice-btn'), face=document.getElementById('dice-face');
-  const hint=document.getElementById('roll-hint');
-  if(hint) hint.style.display='none';
-  btn.classList.add('rolling','disabled');
-  btn.classList.remove('six-glow');
-
+  const hint=document.getElementById('roll-hint'); if(hint) hint.style.display='none';
+  btn.classList.add('rolling','disabled'); btn.classList.remove('six-glow');
   const result=Math.floor(Math.random()*6)+1;
-  for (let i=0; i<12; i++) { face.innerHTML=diceFaceHTML(Math.floor(Math.random()*6)+1); sfxDice(); await sleep(50+i*3); }
-  face.innerHTML=diceFaceHTML(result);
-  btn.classList.remove('rolling');
-
+  for(let i=0;i<12;i++) { face.innerHTML=diceFaceHTML(Math.floor(Math.random()*6)+1); sfxDice(); await sleep(50+i*3); }
+  face.innerHTML=diceFaceHTML(result); btn.classList.remove('rolling');
   showMessage(`${playerNames[currentPlayer]} rolled a ${result}!`);
-
-  if (result===6) {
-    consecutiveSixes++;
-    sfxSix();
-    btn.classList.add('six-glow');
-    if (consecutiveSixes>=3) {
-      sfxTripleSix();
-      showMessage(`🎉🎉🎉 TRIPLE SIX! ${playerNames[currentPlayer]} is on FIRE! 🔥🔥🔥`,'triple-msg');
-      launchMiniConfetti();
-      await sleep(1200);
-    }
-  } else {
-    consecutiveSixes=0;
-  }
-
-  await sleep(400);
-  await movePlayer(currentPlayer, result);
-
-  if (!gameOver) {
-    if (result===6) {
-      showMessage(`🎲 ${playerNames[currentPlayer]} rolled a 6 — roll again!`,'six-msg');
-    } else {
-      currentPlayer=(currentPlayer+1)%numPlayers;
-      consecutiveSixes=0;
-    }
-    updateTurnUI();
-    btn.classList.remove('disabled');
-  }
+  if(result===6) { consecutiveSixes++; sfxSix(); btn.classList.add('six-glow');
+    if(consecutiveSixes>=3) { sfxTripleSix(); showMessage(`🎉🎉🎉 TRIPLE SIX! ${playerNames[currentPlayer]} is on FIRE! 🔥🔥🔥`,'triple-msg'); launchMiniConfetti(); await sleep(1200); }
+  } else { consecutiveSixes=0; }
+  await sleep(400); await movePlayer(currentPlayer,result);
+  if(!gameOver) { if(result===6) { showMessage(`🎲 ${playerNames[currentPlayer]} rolled a 6 — roll again!`,'six-msg'); } else { currentPlayer=(currentPlayer+1)%numPlayers; consecutiveSixes=0; } updateTurnUI(); btn.classList.remove('disabled'); }
   rolling=false;
 }
 
-async function movePlayer(player, steps) {
-  let pos=positions[player];
-  const target=pos+steps;
+async function movePlayer(player,steps) {
+  let pos=positions[player]; const target=pos+steps;
+  if(pos===0) { for(let i=1;i<=steps;i++) { positions[player]=i; positionToken(player); sfxStep(); await sleep(180); } }
+  else if(target>100) { const over=target-100; for(let i=pos+1;i<=100;i++) { positions[player]=i; positionToken(player); sfxStep(); await sleep(180); } await sleep(200); showMessage(`${playerNames[player]} bounces back from 100!`); for(let i=1;i<=over;i++) { positions[player]=100-i; positionToken(player); sfxStep(); await sleep(180); } }
+  else { for(let i=1;i<=steps;i++) { positions[player]=pos+i; positionToken(player); sfxStep(); await sleep(180); } }
+  const token=document.getElementById(`token-${player}`); token.classList.add('bounce'); setTimeout(()=>token.classList.remove('bounce'),400); updateTurnUI();
+  if(positions[player]===100) { await sleep(300); showWin(player); return; }
 
-  if (pos===0) {
-    for (let i=1; i<=steps; i++) { positions[player]=i; positionToken(player); sfxStep(); await sleep(180); }
-  } else if (target>100) {
-    const overshoot = target - 100;
-    for (let i=pos+1; i<=100; i++) { positions[player]=i; positionToken(player); sfxStep(); await sleep(180); }
-    await sleep(200);
-    showMessage(`${playerNames[player]} bounces back from 100!`);
-    for (let i=1; i<=overshoot; i++) { positions[player]=100-i; positionToken(player); sfxStep(); await sleep(180); }
-  } else {
-    for (let i=1; i<=steps; i++) { positions[player]=pos+i; positionToken(player); sfxStep(); await sleep(180); }
+  // Snake / Tuna?
+  if(SNAKES[positions[player]]) {
+    await sleep(500); const dest=SNAKES[positions[player]];
+    const isTuna=positions[player]===BIG_TUNA_HEAD;
+    if(isTuna) { sfxTuna(); showMessage(`🐟 THE BIG TUNA got you! Down to ${dest}!`,'tuna-msg'); }
+    else { sfxMegaSnake(); sfxSnake(); showMessage(`🐍 Oh no! Snake! Slide down to ${dest}!`,'snake-msg'); }
+    token.classList.add('sliding'); positions[player]=dest; positionToken(player);
+    await sleep(800); token.classList.remove('sliding'); updateTurnUI(); return;
   }
-
-  const token=document.getElementById(`token-${player}`);
-  token.classList.add('bounce');
-  setTimeout(()=>token.classList.remove('bounce'),400);
-  updateTurnUI();
-
-  if (positions[player]===100) { await sleep(300); showWin(player); return; }
-
-  // Snake or Tuna?
-  if (SNAKES[positions[player]]) {
-    await sleep(500);
-    const dest=SNAKES[positions[player]];
-    const isTuna = positions[player] === BIG_TUNA_HEAD;
-    if (isTuna) {
-      sfxTuna();
-      showMessage(`🐟 THE BIG TUNA got you! Down to ${dest}!`,'tuna-msg');
-    } else {
-      sfxSnake();
-      showMessage(`🐍 Oh no! Snake! Slide down to ${dest}!`,'snake-msg');
-    }
-    token.classList.add('sliding');
-    positions[player]=dest; positionToken(player);
-    await sleep(800);
-    token.classList.remove('sliding');
-    updateTurnUI();
-    return;
-  }
-
   // Ladder?
-  if (LADDERS[positions[player]]) {
-    await sleep(500);
-    const dest=LADDERS[positions[player]];
-    const isMega = LADDER_THEMES[positions[player]]?.isMega;
-    if (isMega) {
-      sfxMegaLadder();
-      showMessage(`🪜⭐ MEGA LADDER! Zoom up to ${dest}!`,'ladder-msg');
-    } else {
-      sfxLadder();
-      showMessage(`🪜 Yay! Ladder! Climb up to ${dest}!`,'ladder-msg');
-    }
-    token.classList.add('sliding');
-    positions[player]=dest; positionToken(player);
-    await sleep(800);
-    token.classList.remove('sliding');
-    updateTurnUI();
-    if (positions[player]===100) { await sleep(300); showWin(player); }
+  if(LADDERS[positions[player]]) {
+    await sleep(500); const dest=LADDERS[positions[player]];
+    const isMega=(positions[player]===4||positions[player]===80);
+    if(isMega&&dest===100) { sfxMegaLadder(); showMessage(`🪜🌟 THE MAGIC LADDER!! ALL THE WAY TO 100!!`,'ladder-msg'); }
+    else if(isMega) { sfxMegaLadder(); showMessage(`🪜✨ MEGA LADDER! Zoom up to ${dest}!`,'ladder-msg'); }
+    else { sfxLadder(); showMessage(`🪜 Yay! Ladder! Climb up to ${dest}!`,'ladder-msg'); }
+    token.classList.add('sliding'); positions[player]=dest; positionToken(player);
+    await sleep(800); token.classList.remove('sliding'); updateTurnUI();
+    if(positions[player]===100) { await sleep(300); showWin(player); }
   }
 }
 
-// ─── WIN ───
-function showWin(player) {
-  gameOver=true; sfxWin();
-  document.getElementById('win-text').textContent=`${playerNames[player]} wins! 🎉`;
-  document.getElementById('win-text').style.color=playerColors[player];
-  document.getElementById('win-overlay').classList.add('active');
-  launchConfetti();
-}
+function showWin(player) { gameOver=true; sfxWin(); document.getElementById('win-text').textContent=`${playerNames[player]} wins! 🎉`; document.getElementById('win-text').style.color=playerColors[player]; document.getElementById('win-overlay').classList.add('active'); launchConfetti(); }
 
-function launchConfetti() {
-  const colors=['#FF6B6B','#4ECDC4','#FFE66D','#A78BFA','#F472B6','#34D399','#60A5FA','#FB923C','#F87171','#818CF8','#FBBF24','#6EE7B7'];
-  for (let i=0; i<130; i++) {
-    setTimeout(()=>{
-      const p=document.createElement('div');
-      p.className='confetti-piece';
-      p.style.left=Math.random()*100+'vw'; p.style.top='-20px';
-      p.style.background=colors[Math.floor(Math.random()*colors.length)];
-      p.style.borderRadius=Math.random()>0.5?'50%':'2px';
-      const s=7+Math.random()*12;
-      p.style.width=s+'px'; p.style.height=(Math.random()>0.5?s:s*0.5)+'px';
-      p.style.animationDuration=(2.2+Math.random()*2.8)+'s';
-      document.body.appendChild(p);
-      setTimeout(()=>p.remove(),5500);
-    },i*20);
-  }
-}
+function launchConfetti() { const colors=['#FF6B6B','#4ECDC4','#FFE66D','#A78BFA','#F472B6','#34D399','#60A5FA','#FB923C','#F87171','#818CF8','#FBBF24','#6EE7B7']; for(let i=0;i<130;i++) setTimeout(()=>{ const p=document.createElement('div'); p.className='confetti-piece'; p.style.left=Math.random()*100+'vw'; p.style.top='-20px'; p.style.background=colors[Math.floor(Math.random()*colors.length)]; p.style.borderRadius=Math.random()>0.5?'50%':'2px'; const s=7+Math.random()*12; p.style.width=s+'px'; p.style.height=(Math.random()>0.5?s:s*0.5)+'px'; p.style.animationDuration=(2.2+Math.random()*2.8)+'s'; document.body.appendChild(p); setTimeout(()=>p.remove(),5500); },i*20); }
+function launchMiniConfetti() { const colors=['#FDE68A','#FB923C','#F87171','#FBBF24','#EF4444']; for(let i=0;i<40;i++) setTimeout(()=>{ const p=document.createElement('div'); p.className='confetti-piece'; p.style.left=(30+Math.random()*40)+'vw'; p.style.top='40vh'; p.style.background=colors[Math.floor(Math.random()*colors.length)]; p.style.borderRadius='50%'; const s=5+Math.random()*8; p.style.width=s+'px'; p.style.height=s+'px'; p.style.animationDuration=(1.5+Math.random()*1.5)+'s'; document.body.appendChild(p); setTimeout(()=>p.remove(),3500); },i*30); }
 
-function launchMiniConfetti() {
-  const colors=['#FDE68A','#FB923C','#F87171','#FBBF24','#EF4444'];
-  for (let i=0; i<40; i++) {
-    setTimeout(()=>{
-      const p=document.createElement('div');
-      p.className='confetti-piece';
-      p.style.left=(30+Math.random()*40)+'vw'; p.style.top='40vh';
-      p.style.background=colors[Math.floor(Math.random()*colors.length)];
-      p.style.borderRadius='50%';
-      const s=5+Math.random()*8;
-      p.style.width=s+'px'; p.style.height=s+'px';
-      p.style.animationDuration=(1.5+Math.random()*1.5)+'s';
-      document.body.appendChild(p);
-      setTimeout(()=>p.remove(),3500);
-    },i*30);
-  }
-}
-
-// ─── GAME FLOW ───
 function startGame() {
-  for (let i=0; i<4; i++) {
-    const inp=document.getElementById(`name-${i}`);
-    playerNames[i] = inp&&inp.value.trim() ? inp.value.trim() : DEFAULT_NAMES[i];
-  }
-  positions=Array(numPlayers).fill(0);
-  currentPlayer=0; gameOver=false; rolling=false; consecutiveSixes=0;
-  document.getElementById('menu-screen').classList.remove('active');
-  document.getElementById('game-screen').classList.add('active');
-  document.getElementById('win-overlay').classList.remove('active');
+  for(let i=0;i<4;i++) { const inp=document.getElementById(`name-${i}`); playerNames[i]=inp&&inp.value.trim()?inp.value.trim():DEFAULT_NAMES[i]; }
+  positions=Array(numPlayers).fill(0); currentPlayer=0; gameOver=false; rolling=false; consecutiveSixes=0;
+  document.getElementById('menu-screen').classList.remove('active'); document.getElementById('game-screen').classList.add('active'); document.getElementById('win-overlay').classList.remove('active');
   buildBoard(); drawSnakesAndLadders(); createTokens(); buildControls(); updateTurnUI();
   showMessage(`${playerNames[0]} goes first — tap the dice! 🎲`);
 }
-
-function goToMenu() {
-  document.getElementById('game-screen').classList.remove('active');
-  document.getElementById('win-overlay').classList.remove('active');
-  document.getElementById('menu-screen').classList.add('active');
-}
-
+function goToMenu() { document.getElementById('game-screen').classList.remove('active'); document.getElementById('win-overlay').classList.remove('active'); document.getElementById('menu-screen').classList.add('active'); }
 function sleep(ms) { return new Promise(r=>setTimeout(r,ms)); }
 </script>
 </body>
